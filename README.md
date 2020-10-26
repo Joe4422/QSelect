@@ -1,9 +1,13 @@
 # QSelect
 
-QSelect is a utility I wrote to tidy up my Quake folder and make launching custom content easier. It turns an entire folder of content folders, batch files, executables, et cetera, into this:
+QSelect is a utility I wrote to tidy up my Quake folder and make launching custom content easier. It turns an entire folder of content folders, batch files, executables, et cetera, into just a few files.
 
-![alt text](https://media.discordapp.net/attachments/136531542653665280/770279747875373106/unknown.png)
+# Features
 
-It provides a command-line interface to launch custom content easily:
-
-![alt text](https://media.discordapp.net/attachments/136531542653665280/770282123990794270/unknown.png)
+ - Splits game binaries and game content into separate directories, allowing for a much cleaner structure.
+ - Allows easy launching of downloaded game content - no more batch files!
+ - Synchronises config.cfg between content folders so your settings stay the same.
+ - Support for virtually any Quake client, as it emulates how vanilla Quake loads content.
+ - Remembers which content you played last and allows it to be run immediately.
+ - Allows aliases for custom content (e.g. "dopa" is displayed as Dimensions of the Past)
+ - Configurable via a JSON file.

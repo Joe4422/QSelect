@@ -1,0 +1,38 @@
+{
+  "Paths": {
+    "LastSelected": "terra",
+    "Executable": "quakespasm-spiked-win64.exe",
+    "GameDirectory": "Game",
+    "ContentDirectory": "Content",
+    "SyncQuakeConfig": "true",
+    "QuakeConfigPath": "Content/QuakeConfig.cfg"
+  },
+  "Content": {
+    "Aliases": [
+      {
+        "Folder": "id1",
+        "Alias": "Quake"
+      },
+      {
+        "Folder": "ad",
+        "Alias": "Arcane Dimensions"
+      },
+      {
+        "Folder": "dopa",
+        "Alias": "Dimensions of the Past"
+      },
+      {
+        "Folder": "hipnotic",
+        "Alias": "Quake Mission Pack 1: Scourge of Armagon"
+      },
+      {
+        "Folder": "quake15",
+        "Alias": "Quake 1.5"
+      },
+      {
+        "Folder": "rogue",
+        "Alias": "Quake Mission Pack 2: Dissolution of Eternity"
+      }
+    ]
+  }
+}

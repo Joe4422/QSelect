@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="IAppSettings.cs~RFad1a079.TMP" />
+    <None Remove="QSelect.cs~RF9bd8f80.TMP" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Config.Net" Version="4.15.0" />

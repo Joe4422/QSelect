@@ -19,12 +19,14 @@ namespace LibQSelect
             Directory = directory;
             Alias = alias;
             Executable = executable;
+
+            if (alias == null) Alias = Directory;
         }
 
-        public static List<Binary> LoadBinaries(IAppSettings settings, JObject root)
+        public static List<Binary> LoadBinaries(QSelect select, JObject root)
         {
             List<Binary> binaries = new List<Binary>();
-            foreach (string directory in System.IO.Directory.GetDirectories(settings.BinariesDirectory).Select((x) => Path.GetFileName(x)))
+            foreach (string directory in System.IO.Directory.GetDirectories(select.Settings.BinariesDirectory).Select((x) => Path.GetFileName(x)))
             {
                 Binary binary = new Binary(directory);
 
@@ -40,7 +42,7 @@ namespace LibQSelect
             return binaries;
         }
 
-        public void RunBinary(IAppSettings settings, List<Mod> modList)
+        public void RunBinary(QSelect select, List<Mod> modList)
         {
             string cwd = System.IO.Directory.GetCurrentDirectory();
             StringBuilder argBuilder = new StringBuilder();
@@ -48,12 +50,18 @@ namespace LibQSelect
             // Load mods and build argument string
             foreach (Mod mod in modList)
             {
-                mod.LoadMod(settings, this);
+                mod.LoadMod(select, this);
                 argBuilder.Append($"-game {mod.Directory} ");
             }
 
+            // Append "-condebug"
+            argBuilder.Append("-condebug");
+
             // Change current working directory to folder of binary
-            System.IO.Directory.SetCurrentDirectory($"{settings.BinariesDirectory}/{Directory}");
+            System.IO.Directory.SetCurrentDirectory($"{select.Settings.BinariesDirectory}/{Directory}");
+
+            // Update Discord Rich Presence
+            select.Discord.Update(this, modList.Last());
 
             // Start game, and wait until it has finished
             Process p = Process.Start(Executable, argBuilder.ToString());
@@ -63,12 +71,15 @@ namespace LibQSelect
             System.IO.Directory.SetCurrentDirectory(cwd);
 
             // Unload each mod sequentially
-            modList.ForEach((mod) => mod.UnloadMod(settings, this));
+            modList.ForEach((mod) => mod.UnloadMod(select.Settings, this));
+
+            // Update Discord Rich Presence
+            select.Discord.Update();
         }
 
         public override string ToString()
         {
-            if (Alias == null) return Directory;
+            if (Alias == Directory) return Directory;
             else return $"{Alias} ({Directory})";
         }
     }

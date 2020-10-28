@@ -22,12 +22,14 @@ namespace LibQSelect
         {
             Directory = directory;
             Alias = alias;
+
+            if (alias == null) Alias = Directory;
         }
 
-        public static List<Mod> LoadMods(IAppSettings settings, JObject root)
+        public static List<Mod> LoadMods(QSelect select, JObject root)
         {
             List<Mod> mods = new List<Mod>();
-            foreach (string directory in System.IO.Directory.GetDirectories(settings.ModsDirectory).Select((x) => Path.GetFileName(x)))
+            foreach (string directory in System.IO.Directory.GetDirectories(select.Settings.ModsDirectory).Select((x) => Path.GetFileName(x)))
             {
                 Mod mod = new Mod(directory);
 
@@ -53,18 +55,18 @@ namespace LibQSelect
             return mods;
         }
 
-        public void LoadMod(IAppSettings settings, Binary binary)
+        public void LoadMod(QSelect select, Binary binary)
         {
             if (IsLoaded) return;
 
-            JunctionPoint.Create($"{settings.BinariesDirectory}/{binary.Directory}/{Directory}", $"{settings.ModsDirectory}/{Directory}", true);
+            JunctionPoint.Create($"{select.Settings.BinariesDirectory}/{binary.Directory}/{Directory}", $"{select.Settings.ModsDirectory}/{Directory}", true);
 
-            if (settings.SyncQuakeConfig)
+            if (select.Settings.SyncQuakeConfig)
             {
-                File.Copy($"{settings.BinariesDirectory}/{binary.Directory}/config.cfg", $"{settings.BinariesDirectory}/{binary.Directory}/{Directory}/config.cfg", true);
+                File.Copy($"{select.Settings.BinariesDirectory}/{binary.Directory}/config.cfg", $"{select.Settings.BinariesDirectory}/{binary.Directory}/{Directory}/config.cfg", true);
             }
 
-            Dependencies.ForEach((x) => x.LoadMod(settings, binary));
+            Dependencies.ForEach((x) => x.LoadMod(select, binary));
 
             IsLoaded = true;
         }
@@ -91,7 +93,7 @@ namespace LibQSelect
 
         public override string ToString()
         {
-            if (Alias == null) return Directory;
+            if (Alias == Directory) return Directory;
             else return $"{Alias} ({Directory})";
         }
     }

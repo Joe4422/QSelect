@@ -11,31 +11,35 @@ namespace LibQSelect
     {
         public List<Binary> Binaries { get; protected set; }
         public List<Mod> Mods { get; protected set; }
-
-        protected IAppSettings settings;
+        public IAppSettings Settings { get; }
+        public Discord Discord { get; }
 
         public QSelect(string configPath)
         {
             // Load settings
             ConfigurationBuilder<IAppSettings> builder = new ConfigurationBuilder<IAppSettings>().UseJsonFile(configPath);
-            settings = builder.Build();
+            Settings = builder.Build();
 
             // Ensure settings are written to file
-            settings.BinariesDirectory = settings.BinariesDirectory;
-            settings.ModsDirectory = settings.ModsDirectory;
-            settings.SyncQuakeConfig = settings.SyncQuakeConfig;
+            Settings.BinariesDirectory = Settings.BinariesDirectory;
+            Settings.ModsDirectory = Settings.ModsDirectory;
+            Settings.SyncQuakeConfig = Settings.SyncQuakeConfig;
 
             // Read config file
             JObject root = JObject.Parse(File.ReadAllText(configPath));
 
             // Load binaries and mods
-            Binaries = Binary.LoadBinaries(settings, root);
-            Mods = Mod.LoadMods(settings, root);
+            Binaries = Binary.LoadBinaries(this, root);
+            Mods = Mod.LoadMods(this, root);
+
+            // Set up Discord Rich Presence
+            Discord = new Discord(this);
+            Discord.Update();
         }
 
         public void RunBinary(Binary binary, List<Mod> mods)
         {
-            binary.RunBinary(settings, mods);
+            binary.RunBinary(this, mods);
         }
     }
 }

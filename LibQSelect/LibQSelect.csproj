@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Discord.cs~RF6a94d9.TMP" />
+    <None Remove="Discord.cs~RF6ba1a6.TMP" />
     <None Remove="IAppSettings.cs~RFad1a079.TMP" />
     <None Remove="QSelect.cs~RF9bd8f80.TMP" />
   </ItemGroup>
@@ -12,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Config.Net" Version="4.15.0" />
     <PackageReference Include="Config.Net.Json" Version="4.15.0" />
+    <PackageReference Include="DiscordRichPresence" Version="1.0.150" />
   </ItemGroup>
 
 </Project>

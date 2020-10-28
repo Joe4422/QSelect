@@ -9,7 +9,6 @@ namespace QSelectGui
     class Program
     {
         protected static List<Mod> inactiveMods;
-        protected static List<Mod> activeMods;
         protected static QSelect select;
         protected static ListView inactiveModListView;
         protected static ListView activeModListView;
@@ -20,9 +19,8 @@ namespace QSelectGui
             // Load LibQSelect content
             select = new QSelect("config.json");
 
-            inactiveMods = select.Mods.ToList();
-            activeMods = new List<Mod>();
-            id1Mod = inactiveMods.Where((x) => x.Directory == "id1").First();
+            inactiveMods = select.Mods.Where((x) => select.EnabledMods.Contains(x) == false).ToList();
+            id1Mod = select.Mods.Where((x) => x.Directory == "id1").First();
 
             MakeModActive(id1Mod);
 
@@ -43,7 +41,9 @@ namespace QSelectGui
                 Height = Dim.Fill()
             };
             binaryWindow.Add(binaryListView);
+            binaryListView.SelectedItemChanged += BinaryListView_SelectedItemChanged;
             binaryListView.OpenSelectedItem += BinaryListView_OpenSelectedItem;
+            binaryListView.SelectedItem = select.Binaries.IndexOf(select.SelectedBinary);
 
             // Init mod selector
             Window inactiveModWindow = new Window("Inactive Mods")
@@ -68,7 +68,7 @@ namespace QSelectGui
                 Height = Dim.Percent(50.0f)
             };
             top.Add(activeModWindow);
-            activeModListView = new ListView(activeMods)
+            activeModListView = new ListView(select.EnabledMods)
             {
                 Width = Dim.Fill(),
                 Height = Dim.Fill(1)
@@ -96,15 +96,19 @@ namespace QSelectGui
             Application.Run();
         }
 
+        private static void BinaryListView_SelectedItemChanged(ListViewItemEventArgs obj)
+        {
+            select.Settings.LastBinary = (obj.Value as Binary).Directory;
+        }
+
         private static void MoveModDownButton_Clicked()
         {
-            if (activeModListView.SelectedItem > 0 && activeModListView.SelectedItem < activeMods.Count - 1)
+            if (activeModListView.SelectedItem > 0 && activeModListView.SelectedItem < select.EnabledMods.Count - 1)
             {
-                Mod mod = activeMods[activeModListView.SelectedItem];
+                Mod mod = select.EnabledMods[activeModListView.SelectedItem];
 
-                activeMods.Remove(mod);
-                activeMods.Insert(activeModListView.SelectedItem + 1, mod);
-                activeModListView.SelectedItem++;
+                select.MoveInLoadOrder(mod, 1);
+                activeModListView.MoveDown();
             }
 
             activeModListView.SetFocus();
@@ -114,11 +118,10 @@ namespace QSelectGui
         {
             if (activeModListView.SelectedItem > 1)
             {
-                Mod mod = activeMods[activeModListView.SelectedItem];
+                Mod mod = select.EnabledMods[activeModListView.SelectedItem];
 
-                activeMods.Remove(mod);
-                activeMods.Insert(activeModListView.SelectedItem - 1, mod);
-                activeModListView.SelectedItem--;
+                select.MoveInLoadOrder(mod, -1);
+                activeModListView.MoveUp();
             }
 
             activeModListView.SetFocus();
@@ -126,11 +129,13 @@ namespace QSelectGui
 
         private static void BinaryListView_OpenSelectedItem(ListViewItemEventArgs obj)
         {
-            if (activeMods.Count > 0)
+            if (select.EnabledMods.Count > 0)
             {
                 Binary binary = (Binary)obj.Value;
 
-                select.RunBinary(binary, activeMods);
+                select.SelectedBinary = binary;
+
+                select.RunBinary();
             }
         }
 
@@ -151,14 +156,14 @@ namespace QSelectGui
         private static void MakeModActive(Mod mod)
         {
             inactiveMods.Remove(mod);
-            if (activeMods.Contains(mod) == false) activeMods.Add(mod);
+            select.EnableMod(mod);
 
             //mod.Dependencies.ForEach((x) => MakeModActive(x));
         }
 
         private static void MakeModInactive(Mod mod)
         {
-            activeMods.Remove(mod);
+            select.DisableMod(mod);
             if (inactiveMods.Contains(mod) == false) inactiveMods.Add(mod);
 
             //mod.Dependencies.ForEach((x) => MakeModInactive(x));

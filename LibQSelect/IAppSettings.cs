@@ -13,5 +13,11 @@ namespace LibQSelect
 
         [Option(Alias = "Paths.SyncQuakeConfig", DefaultValue = true)]
         bool SyncQuakeConfig { get; set; }
+
+        [Option(Alias = "State.LastBinary", DefaultValue = "")]
+        string LastBinary { get; set; }
+
+        [Option(Alias = "State.EnabledMods", DefaultValue = "")]
+        string EnabledMods { get; set; }
     }
 }

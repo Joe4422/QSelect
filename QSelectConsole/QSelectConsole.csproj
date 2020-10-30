@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibQSelect\LibQSelect.csproj" />
+    <ProjectReference Include="..\LibQuaddicted\LibQuaddicted.csproj" />
   </ItemGroup>
 
 </Project>

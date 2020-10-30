@@ -5,51 +5,22 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-using LibQSelect;
+using LibQuaddicted;
 
 namespace QSelectConsole
 {
     class Program
     {
-        private static readonly string configFile = "config.json";
 
-        static void Main(string[] _)
+        static void Main(string[] args)
         {
+            string url = "https://www.quaddicted.com/reviews/quaddicted_database.xml";
 
-            // Load data
-            QSelect select = new QSelect(configFile);
+            ModDatabase moddb = new ModDatabase(url);
+            DownloadDatabase downdb = new DownloadDatabase(moddb, "db.json", "Mods");
+            _ = downdb.DownloadModAsync(moddb.ModFiles["100b2"], "Downloads").Result;
 
-            // Print options
-            Console.WriteLine("=== QSELECT ===");
-            Console.WriteLine();
-            Console.WriteLine($"Please select a mod.");
-            Console.WriteLine();
-            for (int i = 0; i < select.Mods.Count; i++)
-            {
-                Console.WriteLine($"({i})\t{select.Mods[i]}");
-            }
-            Console.WriteLine();
-
-            // Read selection
-            Mod chosenMod = null;
-            while (chosenMod == null)
-            {
-                Console.Write("Selection: ");
-                string s = Console.ReadLine();
-                if (int.TryParse(s, out int result))
-                {
-                    if (result >= 0 && result < select.Mods.Count)
-                    {
-                        chosenMod = select.Mods[result];
-                    }
-                }
-            }
-
-            Binary chosenBinary = select.Binaries.Where((x) => x.Directory == "quakespasm-spiked").First();
-
-            // Run game
-            select.RunBinary(chosenBinary, new List<Mod> { chosenMod });
+            Console.Write("nice");
         }
     }
 }

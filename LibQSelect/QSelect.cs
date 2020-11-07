@@ -1,4 +1,5 @@
 ﻿using Config.Net;
+using LibQuaddicted;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,24 @@ namespace LibQSelect
 {
     public class QSelect
     {
-        private Binary selectedBinary;
+        private SourcePortOld selectedSourcePort;
 
-        public List<Binary> Binaries { get; protected set; }
+        public List<SourcePortOld> SourcePorts { get; protected set; }
         public List<Mod> Mods { get; protected set; }
         public IAppSettings Settings { get; }
-        public Discord Discord { get; }
+        public DiscordRichPresenceHandler Discord { get; }
         public List<Mod> EnabledMods { get; } = new List<Mod>();
-        public Binary SelectedBinary
+        public SourcePortOld SelectedSourcePort
         {
-            get => selectedBinary;
+            get => selectedSourcePort;
             set
             {
-                selectedBinary = value;
-                Settings.LastBinary = selectedBinary.Directory;
+                selectedSourcePort = value;
+                Settings.LastSourcePort = selectedSourcePort.Directory;
             }
         }
+        public ModDatabase ModDatabase { get; }
+        public DownloadDatabase DownloadDatabase { get; }
 
         public QSelect(string configPath)
         {
@@ -34,48 +37,48 @@ namespace LibQSelect
             Settings = builder.Build();
 
             // Ensure settings are written to file
-            Settings.BinariesDirectory = Settings.BinariesDirectory;
+            Settings.SourcePortsDirectory = Settings.SourcePortsDirectory;
             Settings.ModsDirectory = Settings.ModsDirectory;
             Settings.SyncQuakeConfig = Settings.SyncQuakeConfig;
             Settings.EnabledMods = Settings.EnabledMods;
-            Settings.LastBinary = Settings.LastBinary;
+            Settings.LastSourcePort = Settings.LastSourcePort;
 
             // Read config file
             JObject root = JObject.Parse(File.ReadAllText(configPath));
 
-            // Load binaries and mods
-            Binaries = Binary.LoadBinaries(this, root);
+            // Load source ports and mods
+            SourcePorts = SourcePortOld.LoadSourcePorts(this, root);
             Mods = Mod.LoadMods(this, root);
 
             // Set up EnabledMods
             foreach (string s in Settings.EnabledMods.Split(" ", StringSplitOptions.RemoveEmptyEntries))
             {
-                var mod = Mods.Where((x) => x.Directory == s);
+                var mod = Mods.Where((x) => x.Id == s);
                 if (mod.Count() > 0)
                 {
                     EnabledMods.Add(mod.First());
                 }
             }
 
-            // Set up SelectedBinary
-            var binary = Binaries.Where((x) => x.Directory == Settings.LastBinary);
-            if (binary.Count() > 0)
+            // Set up SelectedSourcePort
+            var sourceport = SourcePorts.Where((x) => x.Directory == Settings.LastSourcePort);
+            if (sourceport.Count() > 0)
             {
-                SelectedBinary = binary.First();
+                SelectedSourcePort = sourceport.First();
             }
             else
             {
-                SelectedBinary = Binaries.First();
+                SelectedSourcePort = SourcePorts.First();
             }
 
             // Set up Discord Rich Presence
-            Discord = new Discord(this);
-            Discord.Update();
+            Discord = new DiscordRichPresenceHandler(this);
+            Discord.SetActiveMod();
         }
 
-        public void RunBinary()
+        public void RunSourcePort()
         {
-            SelectedBinary.RunBinary(this, EnabledMods);
+            SelectedSourcePort.RunSourcePort(this, EnabledMods);
         }
 
         public void EnableMod(Mod mod)
@@ -113,7 +116,7 @@ namespace LibQSelect
             StringBuilder sb = new StringBuilder();
             foreach (Mod mod in EnabledMods)
             {
-                sb.Append(mod.Directory + " ");
+                sb.Append(mod.Id + " ");
             }
 
             Settings.EnabledMods = sb.ToString();

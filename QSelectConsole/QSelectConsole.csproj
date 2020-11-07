@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibQuaddicted\LibQuaddicted.csproj" />
+    <ProjectReference Include="..\LibQuakePackageManager\LibQuakePackageManager.csproj" />
   </ItemGroup>
 
 </Project>

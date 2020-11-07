@@ -8,41 +8,45 @@ using System.Text;
 
 namespace LibQSelect
 {
-    public class Binary
+    public class SourcePortOld
     {
         public string Directory { get; }
         public string Alias { get; set; }
         public string Executable { get; set; }
 
-        public Binary(string directory, string alias = null, string executable = null)
+        public List<Mod> ReadiedMods { get; }
+
+        public SourcePortOld(string directory, string alias = null, string executable = null)
         {
             Directory = directory;
             Alias = alias;
             Executable = executable;
 
             if (alias == null) Alias = Directory;
+
+            ReadiedMods = new List<Mod>();
         }
 
-        public static List<Binary> LoadBinaries(QSelect select, JObject root)
+        public static List<SourcePortOld> LoadSourcePorts(QSelect select, JObject root)
         {
-            List<Binary> binaries = new List<Binary>();
-            foreach (string directory in System.IO.Directory.GetDirectories(select.Settings.BinariesDirectory).Select((x) => Path.GetFileName(x)))
+            List<SourcePortOld> sourceports = new List<SourcePortOld>();
+            foreach (string directory in System.IO.Directory.GetDirectories(select.Settings.SourcePortsDirectory).Select((x) => Path.GetFileName(x)))
             {
-                Binary binary = new Binary(directory);
+                SourcePortOld sourceport = new SourcePortOld(directory);
 
-                if (root != null && root["BinaryMetadata"] != null && root["BinaryMetadata"][directory] != null)
+                if (root != null && root["SourcePortMetadata"] != null && root["SourcePortMetadata"][directory] != null)
                 {
-                    binary.Alias = (string)root["BinaryMetadata"][directory]["Alias"];
-                    binary.Executable = (string)root["BinaryMetadata"][directory]["Executable"];
+                    sourceport.Alias = (string)root["SourcePortMetadata"][directory]["Alias"];
+                    sourceport.Executable = (string)root["SourcePortMetadata"][directory]["Executable"];
                 }
 
-                binaries.Add(binary);
+                sourceports.Add(sourceport);
             }
 
-            return binaries;
+            return sourceports;
         }
 
-        public void RunBinary(QSelect select, List<Mod> modList)
+        public void RunSourcePort(QSelect select, List<Mod> modList)
         {
             string cwd = System.IO.Directory.GetCurrentDirectory();
             StringBuilder argBuilder = new StringBuilder();
@@ -50,15 +54,15 @@ namespace LibQSelect
             // Load mods and build argument string
             foreach (Mod mod in modList)
             {
-                mod.LoadMod(select, this);
-                argBuilder.Append($"-game {mod.Directory} ");
+                mod.ReadyMod(select.Settings, this);
+                argBuilder.Append($"-game {mod.Id} ");
             }
 
             // Append "-condebug"
             argBuilder.Append("-condebug");
 
             // Change current working directory to folder of binary
-            System.IO.Directory.SetCurrentDirectory($"{select.Settings.BinariesDirectory}/{Directory}");
+            System.IO.Directory.SetCurrentDirectory($"{select.Settings.SourcePortsDirectory}/{Directory}");
 
             // Update Discord Rich Presence
             select.Discord.Update(this, modList.Last());
@@ -71,10 +75,10 @@ namespace LibQSelect
             System.IO.Directory.SetCurrentDirectory(cwd);
 
             // Unload each mod sequentially
-            modList.ForEach((mod) => mod.UnloadMod(select.Settings, this));
+            modList.ForEach((mod) => mod.UnreadyMod(select.Settings, this));
 
             // Update Discord Rich Presence
-            select.Discord.Update();
+            select.Discord.SetActiveMod();
         }
 
         public override string ToString()

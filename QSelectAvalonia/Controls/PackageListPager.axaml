@@ -1,0 +1,17 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="QSelectAvalonia.Controls.PackageListPager">
+  <Grid RowDefinitions="*, Auto" ColumnDefinitions="*">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+      <StackPanel x:Name="PackageStackPanel" Orientation="Vertical" HorizontalAlignment="Left" Width="{Binding $parent[Grid].Bounds.Width}"/>
+    </ScrollViewer>
+    <StackPanel Orientation="Horizontal" Grid.Row="1">
+      <Button x:Name="LastPageButton">&lt;</Button>
+      <TextBlock x:Name="PageLabel">1/x</TextBlock>
+      <Button x:Name="NextPageButton">&gt;</Button>
+    </StackPanel>
+  </Grid>
+</UserControl>

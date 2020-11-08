@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MainWindow.axaml~RF13588c6a.TMP" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.0-preview6" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.0-preview6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-preview6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibQSelect\LibQSelect.csproj" />
+    <ProjectReference Include="..\LibQuakePackageManager\LibQuakePackageManager.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\PackageListPager.axaml.cs">
+      <DependentUpon>PackageListPager.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PackageArtView.axaml.cs">
+      <DependentUpon>PackageArtView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

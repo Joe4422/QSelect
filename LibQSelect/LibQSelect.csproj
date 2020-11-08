@@ -7,15 +7,20 @@
   <ItemGroup>
     <None Remove="Discord.cs~RF6a94d9.TMP" />
     <None Remove="Discord.cs~RF6ba1a6.TMP" />
+    <None Remove="DownloadManager.cs~RFf44aae5.TMP" />
+    <None Remove="GameManager.cs~RF128064a9.TMP" />
     <None Remove="IAppSettings.cs~RFad1a079.TMP" />
     <None Remove="IAppSettings.cs~RFbe3210.TMP" />
     <None Remove="QSelect.cs~RF9bd8f80.TMP" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Config.Net" Version="4.15.0" />
-    <PackageReference Include="Config.Net.Json" Version="4.15.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.150" />
+    <PackageReference Include="LostTech.IO.Links" Version="0.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibQuakePackageManager\LibQuakePackageManager.csproj" />
   </ItemGroup>
 
 </Project>

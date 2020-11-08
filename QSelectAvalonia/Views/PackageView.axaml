@@ -1,0 +1,21 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="QSelectAvalonia.Views.PackageView">
+  <Expander x:Name="PackageExpander" ExpandDirection="Down">
+    <Expander.Header>
+      <TextBlock x:Name="HeaderLabel"/>
+    </Expander.Header>
+    <Border BorderThickness="1" BorderBrush="Black">
+      <Grid ColumnDefinitions="*, Auto">
+        <Grid Grid.Column="0" RowDefinitions="Auto, *">
+          <TextBlock x:Name="DescriptionLabel" Grid.Row="1" TextWrapping="Wrap"/>
+          <ListBox x:Name="AttributesListBox" Grid.Row="0" IsEnabled="False" TextBlock.Foreground="Black"/>
+        </Grid>
+        <Image x:Name="PackageScreenshot" Grid.Column="1" Width="512"/>
+      </Grid>
+    </Border>
+  </Expander>
+</UserControl>

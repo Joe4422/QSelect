@@ -166,7 +166,7 @@ namespace LibQuakePackageManager.Databases
         /// </summary>
         protected async Task DeserialiseDatabaseAsync()
         {
-            await Task.Run(() => Items = JsonConvert.DeserializeObject<List<item>>(File.ReadAllText(dbFilePath)));
+            Items = await Task.Run(() => JsonConvert.DeserializeObject<List<item>>(File.ReadAllText(dbFilePath)));
         }
         #endregion
     }

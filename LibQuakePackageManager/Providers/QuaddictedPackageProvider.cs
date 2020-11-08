@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,14 +58,16 @@ namespace LibQuakePackageManager.Providers
                         if (node.Name == "file")
                         {
                             Dictionary<string, string> attributes;
+                            List<string> dependencies = new List<string>() { "id1" };
 
                             // Determine rating
                             string rating = null;
                             if (node.Attributes["rating"] != null)
                             {
                                 string r = node.Attributes["rating"].InnerText;
-                                if (r == "") rating = "Unrated";
-                                else rating = $"{node.Attributes["rating"].InnerText}/5";
+                                bool success = int.TryParse(r, out int rint);
+                                if (!success) rating = "Unrated";
+                                else rating = $"{new string('★', rint)}{new string('☆', 5 - rint)}";
                             }
 
                             // Determine download size
@@ -101,8 +104,21 @@ namespace LibQuakePackageManager.Providers
                                 { "Release Date", node["date"]?.InnerText },
                                 { "Category", type },
                                 { "Download Size", downloadSize },
-                                { "Rating", rating }
+                                { "Rating", rating },
+                                { "Screenshot", $"https://www.quaddicted.com/reviews/screenshots/{node.Attributes["id"]?.InnerText}.jpg" }
                             };
+
+                            // Initialise dependency list
+                            if (node["techinfo"] != null)
+                            {
+                                if (node["techinfo"]["requirements"] != null)
+                                {
+                                    foreach (var file in node["techinfo"]["requirements"])
+                                    {
+                                        dependencies.Add((file as XmlNode).Attributes["id"]?.InnerText);
+                                    }
+                                }
+                            }
 
                             Package item = new Package
                             (
@@ -110,7 +126,8 @@ namespace LibQuakePackageManager.Providers
                                 attributes,
                                 node["md5sum"]?.InnerText,
                                 node["techinfo"]?["zipbasedir"]?.InnerText,
-                                $"https://www.quaddicted.com/filebase/{node.Attributes["id"]?.InnerText}.zip"
+                                $"https://www.quaddicted.com/filebase/{node.Attributes["id"]?.InnerText}.zip",
+                                dependencies
                             );
 
                             Items.Add(item);

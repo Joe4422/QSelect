@@ -48,10 +48,30 @@ namespace LibQuakePackageManager.Databases
                 }
             }
 
+            // Merge dependencies
+            List<string> dependencies = null;
+            if (inferior.Dependencies is null && !(superior.Dependencies is null))
+            {
+                dependencies = new List<string>(superior.Dependencies);
+            }
+            else if (!(inferior.Dependencies is null) && superior.Dependencies is null)
+            {
+                dependencies = new List<string>(inferior.Dependencies);
+            }
+            else if (!(inferior.Dependencies is null) && !(superior.Dependencies is null))
+            {
+                dependencies = new List<string>(inferior.Dependencies);
+                foreach (string s in superior.Dependencies)
+                {
+                    if (dependencies.Contains(s)) continue;
+                    else dependencies.Add(s);
+                }
+            }
+
             // Determine install directory
             string installDirectory = superior.InstallDirectory is null ? inferior.InstallDirectory : superior.InstallDirectory;
 
-            Package package = new Package(superior.Id, attributes, md5Checksum, unzipDirectory, downloadUrl)
+            Package package = new Package(superior.Id, attributes, md5Checksum, unzipDirectory, downloadUrl, dependencies)
             {
                 InstallDirectory = installDirectory
             };

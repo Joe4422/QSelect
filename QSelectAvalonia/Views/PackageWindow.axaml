@@ -1,0 +1,25 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctrls="clr-namespace:QSelectAvalonia.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="QSelectAvalonia.Views.PackageWindow">
+  <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Visible">
+    <Grid RowDefinitions="Auto, Auto, *" Background="White" Width="{Binding $parent[ScrollViewer].Bounds.Width}" >
+      <DockPanel Grid.Row="0" Height="500" Background="Black">
+        <Image x:Name="ImageImage" Width="{Binding $parent[Grid].Bounds.Width}" DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+      </DockPanel>
+      <TextBlock x:Name="TitleTextBlock" Grid.Row="0" VerticalAlignment="Bottom" Text="Example Title Goes Here" TextWrapping="Wrap" FontSize="32" FontWeight="Bold" Margin="5" Foreground="White"/>
+      <ListBox x:Name="AttributesListBox" Background="White" Grid.Row="1" BorderThickness="0"/>
+      <TabControl x:Name="TabControl" Grid.Row="2" Background="White" MinHeight="{Binding $parent[UserControl].Bounds.Height}">
+        <TabItem Header="Description">
+          <ctrls:FormattedTextBlock x:Name="DescriptionTextBlock" Width="{Binding $parent[Grid].Bounds.Width}" Padding="15"/>
+        </TabItem>
+        <TabItem x:Name="DependenciesTabItem" Header="Dependencies">
+          <ListBox x:Name="DependenciesListBox" BorderThickness="0"/>
+        </TabItem>
+      </TabControl>
+    </Grid>
+  </ScrollViewer>
+</UserControl>

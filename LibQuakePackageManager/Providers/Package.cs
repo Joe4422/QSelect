@@ -27,6 +27,10 @@ namespace LibQuakePackageManager.Providers
         /// List of attributes of this package.
         /// </summary>
         public Dictionary<string, string> Attributes { get; }
+        /// <summary>
+        /// List of package IDs that this package relies on.
+        /// </summary>
+        public List<string> Dependencies { get; }
 
         /// <summary>
         /// The directory path where this package is installed.
@@ -39,13 +43,14 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Constructors
-        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null)
+        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null, List<string> dependencies = null)
         {
             Id = id;
             Attributes = attributes;
             MD5Checksum = mD5Checksum;
             UnzipDirectory = unzipDirectory;
             DownloadUrl = downloadUrl;
+            Dependencies = dependencies;
         }
         #endregion
     }

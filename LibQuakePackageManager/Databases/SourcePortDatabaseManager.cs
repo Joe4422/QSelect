@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibQuakePackageManager.Databases
 {
-    public class SourcePortDatabaseManager : BaseDatabaseManager<IProvider<SourcePort>, SourcePort>
+    public class SourcePortDatabaseManager : BaseDatabaseManager<SourcePort>
     {
         public SourcePortDatabaseManager(string dbFilePath, List<IProvider<SourcePort>> providers) : base(dbFilePath, providers)
         {

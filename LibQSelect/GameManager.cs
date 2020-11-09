@@ -1,4 +1,5 @@
-﻿using LibQuakePackageManager.Providers;
+﻿using LibQuakePackageManager.Databases;
+using LibQuakePackageManager.Providers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,10 +13,21 @@ namespace LibQSelect
 {
     public class GameManager
     {
+        #region Variables
+        protected PackageDatabaseManager pdm;
+        #endregion
+
         #region Properties
         public SourcePort LoadedSourcePort { get; protected set; } = null;
         public List<Package> LoadedPackages { get; } = new List<Package>();
         public bool GameRunning { get; protected set; } = false;
+        #endregion
+
+        #region Constructors
+        public GameManager(PackageDatabaseManager pdm)
+        {
+            this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
+        }
         #endregion
 
         #region Methods
@@ -24,45 +36,120 @@ namespace LibQSelect
             LoadedSourcePort = sourcePort ?? throw new ArgumentNullException(nameof(sourcePort));
         }
 
-        public void LoadPackage(Package package)
+        public async Task<string> LoadPackageAsync(Package package)
         {
             if (package is null) throw new ArgumentNullException(nameof(package));
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
+
+            List<Task> loadTasks = new List<Task>();
+            List<Package> dependencies = new List<Package>();
+
+            if (package.Dependencies != null)
+            {
+                foreach (string dpId in package.Dependencies)
+                {
+                    Package dpPkg = pdm[dpId];
+
+                    if (dpPkg is null) return dpId;
+                    else dependencies.Add(dpPkg);
+                }
+            }
+
+            loadTasks.Add(LoadSinglePackageAsync(package));
+
+            foreach (Package dpPkg in dependencies)
+            {
+                loadTasks.Add(LoadPackageAsync(dpPkg));
+            }
+
+            await Task.WhenAll(loadTasks);
+
+            return null;
+        }
+
+        protected async Task LoadSinglePackageAsync(Package package)
+        {
             if (LoadedPackages.Contains(package)) return;
 
-            string pkgPath = $"{Settings.AppSettings.PackagesPath}/{package.Id}";
-            string spPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}";
+            await Task.Run(() =>
+            {
+                string pkgPath = $"{Settings.AppSettings.PackagesPath}/{package.Id}";
+                string spPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}";
 
-            // Create symlink into directory
-            Symlink.CreateDirectory($"{spPath}/{package.Id}", pkgPath);
+                // Create symlink into directory
+                Symlink.CreateDirectory($"{spPath}/{package.Id}", pkgPath);
+            });
 
             // Add to list
             LoadedPackages.Add(package);
         }
 
-        public void UnloadPackage(Package package)
+        public async Task<string> UnloadPackageAsync(Package package)
         {
             if (package is null) throw new ArgumentNullException(nameof(package));
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
-            if (!LoadedPackages.Contains(package)) return;
+            if (!LoadedPackages.Contains(package)) return null;
 
-            string pkgPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}";
-
-            // Delete symlink
-            if (Directory.Exists(pkgPath))
+            List<Package> dependencies = new List<Package>();
+            if (package.Dependencies != null)
             {
-                Directory.Delete(pkgPath);
+                foreach (string dpId in package.Dependencies)
+                {
+                    Package dpPkg = pdm[dpId];
+
+                    if (dpPkg != null) dependencies.Add(dpPkg);
+                    // Honestly we don't really care about missing dependencies here
+                }
             }
+
+            if (await UnloadSinglePackageAsync(package) == false)
+            {
+                return package.Id;
+            }
+
+            foreach (Package dpPkg in dependencies)
+            {
+                string result = await UnloadPackageAsync(dpPkg);
+
+                if (result != null) return result;
+            }
+
+            return null;
+        }
+
+        protected async Task<bool> UnloadSinglePackageAsync(Package package, bool force = false)
+        {
+            // Check no remaining packages are dependent on me
+            if (!force)
+            {
+                foreach (Package loadedPkg in LoadedPackages)
+                {
+                    if (loadedPkg.Dependencies != null && loadedPkg.Dependencies.Contains(package.Id)) return false;
+                }
+            }
+
+            await Task.Run(() =>
+            {
+                string pkgPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}";
+
+                // Delete symlink
+                if (Directory.Exists(pkgPath))
+                {
+                    Directory.Delete(pkgPath);
+                }
+            });
 
             // Remove from list
             LoadedPackages.Remove(package);
+
+            return true;
         }
 
         public void UnloadAllPackages()
         {
             foreach (Package pkg in LoadedPackages.ToList())
             {
-                UnloadPackage(pkg);
+                UnloadSinglePackageAsync(pkg, true).Wait();
             }
         }
 

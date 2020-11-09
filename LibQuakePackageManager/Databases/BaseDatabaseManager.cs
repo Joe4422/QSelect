@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 
 namespace LibQuakePackageManager.Databases
 {
-    public abstract class BaseDatabaseManager<provider, item>
-        where provider : IProvider<item>
+    public abstract class BaseDatabaseManager<item>
         where item : class, IProviderItem
     {
         #region Variables
         protected string dbFilePath;
-        protected List<provider> providers;
+        protected List<IProvider<item>> providers;
         #endregion
 
         #region Properties
@@ -37,7 +36,7 @@ namespace LibQuakePackageManager.Databases
         /// </summary>
         /// <param name="dbFilePath">Path of the database file.</param>
         /// <param name="providers">Providers to read item data from.</param>
-        public BaseDatabaseManager(string dbFilePath, List<provider> providers)
+        public BaseDatabaseManager(string dbFilePath, List<IProvider<item>> providers)
         {
             // Initialise and perform null argument check
             this.dbFilePath = dbFilePath ?? throw new ArgumentNullException(nameof(dbFilePath));
@@ -95,7 +94,7 @@ namespace LibQuakePackageManager.Databases
 
             // Run all provider fetch tasks simultaneously
             List<Task> providerRefreshTasks = new List<Task>();
-            foreach (provider provider in providers)
+            foreach (IProvider<item> provider in providers)
             {
                 providerRefreshTasks.Add(provider.RefreshAsync());
             }

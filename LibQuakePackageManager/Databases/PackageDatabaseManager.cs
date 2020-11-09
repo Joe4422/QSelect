@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibQuakePackageManager.Databases
 {
-    public class PackageDatabaseManager : BaseDatabaseManager<IProvider<Package>, Package>
+    public class PackageDatabaseManager : BaseDatabaseManager<Package>
     {
         public PackageDatabaseManager(string dbFilePath, List<IProvider<Package>> providers) : base(dbFilePath, providers)
         {

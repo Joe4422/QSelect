@@ -13,14 +13,18 @@ namespace LibQuakePackageManager.Providers
         /// <summary>
         /// The URL at which the package exists.
         /// </summary>
-        public string DownloadUrl { get; }
+        string DownloadUrl { get; }
         /// <summary>
         /// The directory path where this package is installed.
         /// </summary>
-        public string InstallDirectory { get; set; }
+        string InstallDirectory { get; set; }
         /// <summary>
         /// True if this package has been downloaded, false otherwise.
         /// </summary>
-        public bool IsDownloaded => InstallDirectory != null;
+        bool IsDownloaded => InstallDirectory != null;
+        /// <summary>
+        /// List of item IDs that this item relies on.
+        /// </summary>
+        List<string> Dependencies { get; }
     }
 }

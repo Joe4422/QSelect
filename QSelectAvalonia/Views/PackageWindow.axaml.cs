@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using LibQuakePackageManager.Providers;
@@ -23,8 +24,16 @@ namespace QSelectAvalonia.Views
         protected TabItem DependenciesTabItem;
         protected ListBox DependenciesListBox;
         protected Image ImageImage;
+        protected Button PlayNowButton;
+        protected Button DownloadButton;
 
-        protected Package package;
+        public Package Package { get; protected set; }
+
+        public delegate void RunPackageEventHandler(object sender, Package package);
+        public event RunPackageEventHandler PackageRun;
+
+        public delegate void DownloadPackageEventHandler(object sender, Package package);
+        public event DownloadPackageEventHandler DownloadPackage;
 
         public PackageWindow()
         {
@@ -33,7 +42,7 @@ namespace QSelectAvalonia.Views
 
         public void DisplayPackage(Package package, MemoryStream imageStream)
         {
-            this.package = package;
+            Package = package;
 
             TabControl.SelectedIndex = 0;
 
@@ -64,12 +73,13 @@ namespace QSelectAvalonia.Views
 
             // Load image
             DisplayImage(imageStream);
+
         }
 
         protected void DisplayImage(MemoryStream imageStream)
         {
             // Set package image
-            if (imageStream != null && package.Attributes.ContainsKey("Screenshot"))
+            if (imageStream != null && Package.Attributes.ContainsKey("Screenshot"))
             {
                 ImageImage.IsVisible = false;
                 imageStream.Seek(0, SeekOrigin.Begin);
@@ -101,6 +111,8 @@ namespace QSelectAvalonia.Views
             DependenciesTabItem = this.FindControl<TabItem>("DependenciesTabItem");
             DependenciesListBox = this.FindControl<ListBox>("DependenciesListBox");
             ImageImage = this.FindControl<Image>("ImageImage");
+            PlayNowButton = this.FindControl<Button>("PlayNowButton");
+            DownloadButton = this.FindControl<Button>("DownloadButton");
         }
     }
 }

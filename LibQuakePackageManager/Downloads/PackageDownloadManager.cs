@@ -1,4 +1,5 @@
-﻿using LibQuakePackageManager.Providers;
+﻿using LibQuakePackageManager.Databases;
+using LibQuakePackageManager.Providers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ namespace LibQuakePackageManager.Downloads
 {
     public class PackageDownloadManager : BaseDownloadManager<Package>
     {
-        public PackageDownloadManager(string downloadDir, string installDir) : base(downloadDir, installDir)
+        public PackageDownloadManager(string downloadDir, string installDir, BaseDatabaseManager<Package> database) : base(downloadDir, installDir, database)
         {
         }
 

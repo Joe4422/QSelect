@@ -18,7 +18,7 @@ namespace QSelectConsole
             InitDatabases();
 
             dlm = new DownloadManager(pdm, spdm);
-            gm = new GameManager();
+            gm = new GameManager(pdm);
 
             if (args.Length < 2)
             {
@@ -68,7 +68,7 @@ namespace QSelectConsole
                 IProviderItem pkg = pdm[id];
                 IProviderItem sp = spdm[id];
 
-                IProviderItem item = null;
+                IProviderItem item;
                 if (pkg != null) item = pkg;
                 else if (sp != null) item = sp;
                 else
@@ -112,7 +112,7 @@ namespace QSelectConsole
                     gm.UnloadAllPackages();
                     return;
                 }
-                gm.LoadPackage(pkg);
+                gm.LoadPackageAsync(pkg).Wait();
             }
 
             Console.WriteLine($"Executing {sourcePortId}...");

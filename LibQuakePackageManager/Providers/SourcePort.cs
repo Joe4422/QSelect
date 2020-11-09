@@ -44,6 +44,8 @@ namespace LibQuakePackageManager.Providers
         /// </summary>
         public OperatingSystem SupportedOS { get; }
 
+        public List<string> Dependencies { get; }
+
         /// <summary>
         /// True if source port has been downloaded, false otherwise.
         /// </summary>
@@ -63,6 +65,7 @@ namespace LibQuakePackageManager.Providers
             Executable = executable;
             DownloadUrl = downloadUrl;
             SupportedOS = os;
+            Dependencies = null;
         }
         #endregion
     }

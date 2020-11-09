@@ -49,8 +49,10 @@ namespace LibQuakePackageManager.Providers
             {
                 foreach (string id in Directory.GetDirectories(packageDirPath).Select(x => Path.GetFileName(x)))
                 {
-                    Package package = new Package(id);
-                    package.InstallDirectory = $"{packageDirPath}/{id}";
+                    Package package = new Package(id)
+                    {
+                        InstallDirectory = $"{packageDirPath}/{id}"
+                    };
 
                     Items.Add(package);
                 }

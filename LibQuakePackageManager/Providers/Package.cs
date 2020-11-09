@@ -27,9 +27,7 @@ namespace LibQuakePackageManager.Providers
         /// List of attributes of this package.
         /// </summary>
         public Dictionary<string, string> Attributes { get; }
-        /// <summary>
-        /// List of package IDs that this package relies on.
-        /// </summary>
+
         public List<string> Dependencies { get; }
 
         /// <summary>

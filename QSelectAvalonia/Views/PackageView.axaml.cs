@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace QSelectAvalonia.Views
 {
-    public class PackageView : UserControl, IItemView
+    public class PackageView : UserControl
     {
         public Package Package { get; protected set; }
 

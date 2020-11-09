@@ -11,10 +11,14 @@ namespace LibQSelect
     public class DownloadManager
     {
         #region Variables
-        readonly PackageDownloadManager packageDownloadManager;
-        readonly SourcePortDownloadManager sourcePortDownloadManager;
         readonly PackageDatabaseManager pdm;
         readonly SourcePortDatabaseManager spdm;
+        readonly Settings settings;
+        #endregion
+
+        #region Properties
+        public PackageDownloadManager PackageDownloadManager { get; }
+        public SourcePortDownloadManager SourcePortDownloadManager { get; }
         #endregion
 
         #region Events
@@ -26,13 +30,14 @@ namespace LibQSelect
         #endregion
 
         #region Constructors
-        public DownloadManager(PackageDatabaseManager pdm, SourcePortDatabaseManager spdm)
+        public DownloadManager(Settings settings, PackageDatabaseManager pdm, SourcePortDatabaseManager spdm)
         {
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
             this.spdm = spdm ?? throw new ArgumentNullException(nameof(spdm));
 
-            packageDownloadManager = new PackageDownloadManager(Settings.AppSettings.DownloadsPath, Settings.AppSettings.PackagesPath, this.pdm);
-            sourcePortDownloadManager = new SourcePortDownloadManager(Settings.AppSettings.DownloadsPath, Settings.AppSettings.SourcePortsPath, this.spdm);
+            PackageDownloadManager = new PackageDownloadManager(this.settings.DownloadsPath, this.settings.PackagesPath, this.pdm);
+            SourcePortDownloadManager = new SourcePortDownloadManager(this.settings.DownloadsPath, this.settings.SourcePortsPath, this.spdm);
         }
         #endregion
 
@@ -42,16 +47,14 @@ namespace LibQSelect
             if (item is Package package)
             {
                 DownloadStarted.Invoke(this, item);
-                string s = await packageDownloadManager.DownloadItemAsync(package);
-                await pdm.SaveDatabaseAsync();
+                string s = await PackageDownloadManager.DownloadItemAsync(package);
                 DownloadFinished.Invoke(this, item);
                 return s;
             }
             else if (item is SourcePort sourcePort)
             {
                 DownloadStarted.Invoke(this, item);
-                string s = await sourcePortDownloadManager.DownloadItemAsync(sourcePort);
-                await spdm.SaveDatabaseAsync();
+                string s = await SourcePortDownloadManager.DownloadItemAsync(sourcePort);
                 DownloadFinished.Invoke(this, item);
                 return s;
             }

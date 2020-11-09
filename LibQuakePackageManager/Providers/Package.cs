@@ -51,5 +51,17 @@ namespace LibQuakePackageManager.Providers
             Dependencies = dependencies;
         }
         #endregion
+
+        #region Methods
+        public string GetAttribute(string key)
+        {
+            bool success = Attributes.TryGetValue(key, out string value);
+
+            if (success) return value;
+            else return null;
+        }
+
+        public bool HasAttribute(string key) => Attributes.ContainsKey(key);
+        #endregion
     }
 }

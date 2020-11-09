@@ -15,6 +15,7 @@ namespace LibQSelect
     {
         #region Variables
         protected PackageDatabaseManager pdm;
+        protected Settings settings;
         #endregion
 
         #region Properties
@@ -24,8 +25,9 @@ namespace LibQSelect
         #endregion
 
         #region Constructors
-        public GameManager(PackageDatabaseManager pdm)
+        public GameManager(Settings settings, PackageDatabaseManager pdm)
         {
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
         }
         #endregion
@@ -73,8 +75,8 @@ namespace LibQSelect
 
             await Task.Run(() =>
             {
-                string pkgPath = $"{Settings.AppSettings.PackagesPath}/{package.Id}";
-                string spPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}";
+                string pkgPath = $"{settings.PackagesPath}/{package.Id}";
+                string spPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}";
 
                 // Create symlink into directory
                 Symlink.CreateDirectory($"{spPath}/{package.Id}", pkgPath);
@@ -130,7 +132,7 @@ namespace LibQSelect
 
             await Task.Run(() =>
             {
-                string pkgPath = $"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}";
+                string pkgPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}";
 
                 // Delete symlink
                 if (Directory.Exists(pkgPath))
@@ -169,7 +171,7 @@ namespace LibQSelect
             string cwd = Directory.GetCurrentDirectory();
 
             // Set CWD
-            Directory.SetCurrentDirectory($"{Settings.AppSettings.SourcePortsPath}/{LoadedSourcePort.Id}/");
+            Directory.SetCurrentDirectory($"{settings.SourcePortsPath}/{LoadedSourcePort.Id}/");
 
             // Start game, and wait until it's over
             await Task.Run(() => Process.Start(LoadedSourcePort.Executable, sb.ToString()).WaitForExit());

@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using LibQuakePackageManager.Providers;
 using QSelectAvalonia.Controls;
+using QSelectAvalonia.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace QSelectAvalonia.Views
             this.InitializeComponent();
         }
 
-        public void DisplayPackage(Package package, MemoryStream imageStream)
+        public void DisplayPackage(Package package)
         {
             Package = package;
 
@@ -72,20 +73,21 @@ namespace QSelectAvalonia.Views
             }
 
             // Load image
-            DisplayImage(imageStream);
+            DisplayImageAsync().ConfigureAwait(false);
 
         }
 
-        protected void DisplayImage(MemoryStream imageStream)
+        protected async Task DisplayImageAsync()
         {
+            byte[] imageData = await PackageImageService.GetBitmapAsync(Package);
             // Set package image
-            if (imageStream != null && Package.Attributes.ContainsKey("Screenshot"))
+            if (imageData != null && Package.Attributes.ContainsKey("Screenshot"))
             {
                 ImageImage.IsVisible = false;
-                imageStream.Seek(0, SeekOrigin.Begin);
+                using MemoryStream ms = new MemoryStream(imageData);
                 try
                 {
-                    Bitmap bitmap = new Bitmap(imageStream);
+                    Bitmap bitmap = new Bitmap(ms);
 
                     ImageImage.Source = bitmap;
                     ImageImage.IsVisible = true;

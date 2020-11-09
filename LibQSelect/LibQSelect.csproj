@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DatabaseManager.cs~RF1a92784f.TMP" />
     <None Remove="Discord.cs~RF6a94d9.TMP" />
     <None Remove="Discord.cs~RF6ba1a6.TMP" />
     <None Remove="DownloadManager.cs~RFf44aae5.TMP" />
     <None Remove="GameManager.cs~RF128064a9.TMP" />
     <None Remove="IAppSettings.cs~RFad1a079.TMP" />
     <None Remove="IAppSettings.cs~RFbe3210.TMP" />
+    <None Remove="QSelect.cs~RF1a862e8f.TMP" />
     <None Remove="QSelect.cs~RF9bd8f80.TMP" />
   </ItemGroup>
 

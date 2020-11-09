@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using LibQuakePackageManager.Providers;
 using QSelectAvalonia.Views;
 using System;
@@ -33,24 +34,27 @@ namespace QSelectAvalonia.Controls
         {
             this.packages = packages;
 
-            LoadNextPackageSet();
+            LoadNextPackageSetAsync().ConfigureAwait(false);
             PackageScrollViewer.ScrollToHome();
         }
 
-        protected void LoadNextPackageSet()
+        protected async Task LoadNextPackageSetAsync()
         {
-            foreach (Package package in packages.GetRange(numLoads * packagesPerLoad, packagesPerLoad))
+            await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                PackageArtView pav = new PackageArtView(package);
-                pav.Tapped += Pav_Tapped;
-                PackageWrapPanel.Children.Add(pav);
-            }
-            numLoads++;
+                foreach (Package package in packages.GetRange(numLoads * packagesPerLoad, packagesPerLoad))
+                {
+                    PackageArtView pav = new PackageArtView(package);
+                    pav.Tapped += Pav_Tapped;
+                    PackageWrapPanel.Children.Add(pav);
+                }
+                numLoads++;
+            });
         }
 
         private void Pav_Tapped(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            PackageWindow.DisplayPackage((sender as PackageArtView).Package, (sender as PackageArtView).ImageStream);
+            PackageWindow.DisplayPackage((sender as PackageArtView).ViewModel.Package);
             DarkenPanel.IsVisible = true;
         }
 
@@ -82,7 +86,7 @@ namespace QSelectAvalonia.Controls
             var delta = Math.Abs(ScrollViewer.VerticalScrollBarMaximumProperty.Getter(sv) - sv.Offset.Y);
             if (delta <= double.Epsilon)
             {
-                LoadNextPackageSet();
+                LoadNextPackageSetAsync().ConfigureAwait(false);
             }
         }
     }

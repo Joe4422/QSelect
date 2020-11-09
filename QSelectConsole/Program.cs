@@ -17,8 +17,10 @@ namespace QSelectConsole
         {
             InitDatabases();
 
-            dlm = new DownloadManager(pdm, spdm);
-            gm = new GameManager(pdm);
+            Settings settings = new Settings();
+
+            dlm = new DownloadManager(settings, pdm, spdm);
+            gm = new GameManager(settings, pdm);
 
             if (args.Length < 2)
             {

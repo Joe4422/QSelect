@@ -36,8 +36,8 @@ namespace LibQSelect
             this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
             this.spdm = spdm ?? throw new ArgumentNullException(nameof(spdm));
 
-            PackageDownloadManager = new PackageDownloadManager(this.settings.DownloadsPath, this.settings.PackagesPath, this.pdm);
-            SourcePortDownloadManager = new SourcePortDownloadManager(this.settings.DownloadsPath, this.settings.SourcePortsPath, this.spdm);
+            PackageDownloadManager = new PackageDownloadManager(this.settings.DownloadsPath, this.settings.PackagesPath);
+            SourcePortDownloadManager = new SourcePortDownloadManager(this.settings.DownloadsPath, this.settings.SourcePortsPath);
         }
         #endregion
 

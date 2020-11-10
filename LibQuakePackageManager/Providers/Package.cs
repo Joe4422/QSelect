@@ -1,5 +1,8 @@
-﻿using System;
+﻿using LibQuakePackageManager.Databases;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LibQuakePackageManager.Providers
@@ -28,7 +31,8 @@ namespace LibQuakePackageManager.Providers
         /// </summary>
         public Dictionary<string, string> Attributes { get; }
 
-        public List<string> Dependencies { get; }
+        [JsonConverter(typeof(DependenciesToKeyListJsonConverter))]
+        public Dictionary<string, IProviderItem> Dependencies { get; }
 
         /// <summary>
         /// The directory path where this package is installed.
@@ -41,7 +45,7 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Constructors
-        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null, List<string> dependencies = null)
+        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null, Dictionary<string, IProviderItem> dependencies = null)
         {
             Id = id;
             Attributes = attributes;

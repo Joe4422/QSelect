@@ -40,7 +40,7 @@ namespace LibQuakePackageManager.Providers
                         { "Release Date", "05.03.97" },
                         { "Screenshot", "https://static.wikia.nocookie.net/quake/images/f/f6/QSALogo.JPG" }
                     },
-                    dependencies: new List<string> { "id1" }
+                    dependencies: new Dictionary<string, IProviderItem> { { "id1", null } }
                 ),
                 new Package
                 (
@@ -53,7 +53,7 @@ namespace LibQuakePackageManager.Providers
                         { "Release Date", "19.03.97" },
                         { "Screenshot", "https://static.wikia.nocookie.net/quake/images/2/2d/QDELogo.JPG" }
                     },
-                    dependencies: new List<string> { "id1" }
+                    dependencies: new Dictionary<string, IProviderItem> { { "id1", null } }
                 )
             };
         }

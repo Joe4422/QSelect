@@ -58,7 +58,7 @@ namespace LibQuakePackageManager.Providers
                         if (node.Name == "file")
                         {
                             Dictionary<string, string> attributes;
-                            List<string> dependencies = new List<string>() { "id1" };
+                            Dictionary<string, IProviderItem> dependencies = new Dictionary<string, IProviderItem>() { { "id1", null } };
 
                             // Determine rating
                             string rating = null;
@@ -115,7 +115,7 @@ namespace LibQuakePackageManager.Providers
                                 {
                                     foreach (var file in node["techinfo"]["requirements"])
                                     {
-                                        dependencies.Add((file as XmlNode).Attributes["id"]?.InnerText);
+                                        dependencies[(file as XmlNode).Attributes["id"]?.InnerText] = null;
                                     }
                                 }
                             }

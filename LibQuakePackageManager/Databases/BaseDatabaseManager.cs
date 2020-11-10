@@ -103,6 +103,9 @@ namespace LibQuakePackageManager.Databases
             // Merge items together to populate Items.
             MergeItemLists();
 
+            // Populate dependency list
+            PopulateDependencies();
+
             // Serialise resulting list
             await SerialiseDatabaseAsync();
         }
@@ -153,6 +156,23 @@ namespace LibQuakePackageManager.Databases
         protected abstract item MergeItems(item superior, item inferior);
 
         /// <summary>
+        /// Populates the dependency list of each item.
+        /// </summary>
+        protected void PopulateDependencies()
+        {
+            foreach (item item in Items)
+            {
+                if (item.Dependencies is null) continue;
+                List<string> keys = item.Dependencies.Keys.ToList();
+
+                foreach (string key in keys)
+                {
+                    item.Dependencies[key] = this[key];
+                }
+            }
+        }
+
+        /// <summary>
         /// Serialises the database into a JSON file.
         /// </summary>
         protected async Task SerialiseDatabaseAsync()
@@ -166,6 +186,8 @@ namespace LibQuakePackageManager.Databases
         protected async Task DeserialiseDatabaseAsync()
         {
             Items = await Task.Run(() => JsonConvert.DeserializeObject<List<item>>(File.ReadAllText(dbFilePath)));
+
+            PopulateDependencies();
         }
         #endregion
     }

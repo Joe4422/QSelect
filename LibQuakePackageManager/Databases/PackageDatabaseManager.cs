@@ -49,22 +49,21 @@ namespace LibQuakePackageManager.Databases
             }
 
             // Merge dependencies
-            List<string> dependencies = null;
+            Dictionary<string, IProviderItem> dependencies = null;
             if (inferior.Dependencies is null && !(superior.Dependencies is null))
             {
-                dependencies = new List<string>(superior.Dependencies);
+                dependencies = new Dictionary<string, IProviderItem>(superior.Dependencies);
             }
             else if (!(inferior.Dependencies is null) && superior.Dependencies is null)
             {
-                dependencies = new List<string>(inferior.Dependencies);
+                dependencies = new Dictionary<string, IProviderItem>(inferior.Dependencies);
             }
             else if (!(inferior.Dependencies is null) && !(superior.Dependencies is null))
             {
-                dependencies = new List<string>(inferior.Dependencies);
-                foreach (string s in superior.Dependencies)
+                dependencies = new Dictionary<string, IProviderItem>(inferior.Dependencies);
+                foreach (string s in superior.Dependencies.Keys)
                 {
-                    if (dependencies.Contains(s)) continue;
-                    else dependencies.Add(s);
+                    dependencies[s] = superior.Dependencies[s];
                 }
             }
 

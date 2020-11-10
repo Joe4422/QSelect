@@ -31,7 +31,7 @@ namespace QSelectAvalonia.Views
         public Package Package { get; protected set; }
 
         public delegate void RunPackageEventHandler(object sender, Package package);
-        public event RunPackageEventHandler PackageRun;
+        public event RunPackageEventHandler RunPackage;
 
         public delegate void DownloadPackageEventHandler(object sender, Package package);
         public event DownloadPackageEventHandler DownloadPackage;
@@ -115,6 +115,9 @@ namespace QSelectAvalonia.Views
             ImageImage = this.FindControl<Image>("ImageImage");
             PlayNowButton = this.FindControl<Button>("PlayNowButton");
             DownloadButton = this.FindControl<Button>("DownloadButton");
+
+            PlayNowButton.Click += (a, b) => RunPackage.Invoke(this, Package);
+            DownloadButton.Click += (a, b) => DownloadPackage.Invoke(this, Package);
         }
     }
 }

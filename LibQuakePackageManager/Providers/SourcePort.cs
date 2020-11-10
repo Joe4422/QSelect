@@ -44,7 +44,7 @@ namespace LibQuakePackageManager.Providers
         /// </summary>
         public OperatingSystem SupportedOS { get; }
 
-        public List<string> Dependencies { get; }
+        public Dictionary<string, IProviderItem> Dependencies { get; }
 
         /// <summary>
         /// True if source port has been downloaded, false otherwise.

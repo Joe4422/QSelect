@@ -15,10 +15,12 @@ namespace LibQuakePackageManager.Downloads
         #region Variables
         protected string downloadDir;
         protected string installDir;
-        protected BaseDatabaseManager<item> database;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Contains all items that are currently being downloaded.
+        /// </summary>
         public List<item> DownloadsInProgress { get; } = new List<item>();
         #endregion
 
@@ -28,11 +30,10 @@ namespace LibQuakePackageManager.Downloads
         /// </summary>
         /// <param name="downloadDir">The directory content should be downloaded to before installing.</param>
         /// <param name="installDir">The directory downloaded content should be installed to.</param>
-        public BaseDownloadManager(string downloadDir, string installDir, BaseDatabaseManager<item> database)
+        public BaseDownloadManager(string downloadDir, string installDir)
         {
             this.downloadDir = downloadDir ?? throw new ArgumentNullException(nameof(downloadDir));
             this.installDir = installDir ?? throw new ArgumentNullException(nameof(installDir));
-            this.database = database ?? throw new ArgumentNullException(nameof(database));
         }
         #endregion
 
@@ -43,25 +44,13 @@ namespace LibQuakePackageManager.Downloads
         /// <param name="item">The item to download.</param>
         public async Task<string> DownloadItemAsync(item item)
         {
-            List<item> dependencies = new List<item>();
             List<Task> itemDownloadTasks = new List<Task>();
-
-            if (item.Dependencies != null)
-            {
-                foreach (string dpId in item.Dependencies)
-                {
-                    item dependency = database[dpId];
-
-                    if (dependency == null) return dpId;
-                    else dependencies.Add(dependency);
-                }
-            }
 
             itemDownloadTasks.Add(DownloadSingleItemAsync(item));
 
-            foreach (item dlItem in dependencies)
+            foreach (string key in item.Dependencies.Keys)
             {
-                itemDownloadTasks.Add(DownloadItemAsync(dlItem));
+                itemDownloadTasks.Add(DownloadItemAsync(item.Dependencies[key] as item));
             }
 
             await Task.WhenAll(itemDownloadTasks);

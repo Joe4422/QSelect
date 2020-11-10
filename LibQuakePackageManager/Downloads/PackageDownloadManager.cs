@@ -11,7 +11,7 @@ namespace LibQuakePackageManager.Downloads
 {
     public class PackageDownloadManager : BaseDownloadManager<Package>
     {
-        public PackageDownloadManager(string downloadDir, string installDir, BaseDatabaseManager<Package> database) : base(downloadDir, installDir, database)
+        public PackageDownloadManager(string downloadDir, string installDir) : base(downloadDir, installDir)
         {
         }
 

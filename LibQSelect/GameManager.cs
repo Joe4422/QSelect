@@ -44,24 +44,12 @@ namespace LibQSelect
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
 
             List<Task> loadTasks = new List<Task>();
-            List<Package> dependencies = new List<Package>();
-
-            if (package.Dependencies != null)
-            {
-                foreach (string dpId in package.Dependencies)
-                {
-                    Package dpPkg = pdm[dpId];
-
-                    if (dpPkg is null) return dpId;
-                    else dependencies.Add(dpPkg);
-                }
-            }
 
             loadTasks.Add(LoadSinglePackageAsync(package));
 
-            foreach (Package dpPkg in dependencies)
+            foreach (string key in package.Dependencies.Keys)
             {
-                loadTasks.Add(LoadPackageAsync(dpPkg));
+                loadTasks.Add(LoadPackageAsync(package.Dependencies[key] as Package));
             }
 
             await Task.WhenAll(loadTasks);
@@ -93,25 +81,17 @@ namespace LibQSelect
             if (!LoadedPackages.Contains(package)) return null;
 
             List<Package> dependencies = new List<Package>();
-            if (package.Dependencies != null)
-            {
-                foreach (string dpId in package.Dependencies)
-                {
-                    Package dpPkg = pdm[dpId];
-
-                    if (dpPkg != null) dependencies.Add(dpPkg);
-                    // Honestly we don't really care about missing dependencies here
-                }
-            }
 
             if (await UnloadSinglePackageAsync(package) == false)
             {
                 return package.Id;
             }
 
-            foreach (Package dpPkg in dependencies)
+            foreach (string key in package.Dependencies.Keys)
             {
-                string result = await UnloadPackageAsync(dpPkg);
+                if (package.Dependencies[key] == null) continue;
+
+                string result = await UnloadPackageAsync(package.Dependencies[key] as Package);
 
                 if (result != null) return result;
             }
@@ -126,7 +106,7 @@ namespace LibQSelect
             {
                 foreach (Package loadedPkg in LoadedPackages)
                 {
-                    if (loadedPkg.Dependencies != null && loadedPkg.Dependencies.Contains(package.Id)) return false;
+                    if (loadedPkg.Dependencies != null && loadedPkg.Dependencies.Keys.Contains(package.Id)) return false;
                 }
             }
 

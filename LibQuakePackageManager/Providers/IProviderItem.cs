@@ -25,6 +25,6 @@ namespace LibQuakePackageManager.Providers
         /// <summary>
         /// List of item IDs that this item relies on.
         /// </summary>
-        List<string> Dependencies { get; }
+        Dictionary<string, IProviderItem> Dependencies { get; }
     }
 }

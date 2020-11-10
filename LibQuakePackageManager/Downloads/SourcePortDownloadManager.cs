@@ -11,7 +11,7 @@ namespace LibQuakePackageManager.Downloads
 {
     public class SourcePortDownloadManager : BaseDownloadManager<SourcePort>
     {
-        public SourcePortDownloadManager(string downloadDir, string installDir, BaseDatabaseManager<SourcePort> database) : base(downloadDir, installDir, database)
+        public SourcePortDownloadManager(string downloadDir, string installDir) : base(downloadDir, installDir)
         {
         }
 

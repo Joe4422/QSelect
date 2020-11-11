@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using LibQuakePackageManager.Databases;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using LibQSelect;
+using LibPackageManager.Repositories;
 
 namespace QSelectConsole
 {
@@ -45,19 +45,19 @@ namespace QSelectConsole
 
         public static void InitDatabases()
         {
-            List<IProvider<Package>> packageProviders = new List<IProvider<Package>>()
+            List<IRepository<Package>> packageProviders = new List<IRepository<Package>>()
             {
-                new LocalPackageProvider("Packages"),
-                new BuiltInPackageProvider(),
-                new QuaddictedPackageProvider()
+                new InstalledPackageRepository("Packages"),
+                new BuiltInPackageRepository(),
+                new QuaddictedPackageRepository()
             };
             pdm = new PackageDatabaseManager("packages.json", packageProviders);
             pdm.LoadDatabaseAsync().Wait();
 
-            List<IProvider<SourcePort>> sourcePortProviders = new List<IProvider<SourcePort>>()
+            List<IRepository<SourcePort>> sourcePortProviders = new List<IRepository<SourcePort>>()
             {
-                new LocalSourcePortProvider("SourcePorts"),
-                new BuiltInSourcePortProvider()
+                new InstalledSourcePortRepository("SourcePorts"),
+                new BuiltInSourcePortRepository()
             };
             spdm = new SourcePortDatabaseManager("sourceports.json", sourcePortProviders);
             spdm.LoadDatabaseAsync().Wait();
@@ -67,10 +67,10 @@ namespace QSelectConsole
         {
             foreach (string id in args[1..])
             {
-                IProviderItem pkg = pdm[id];
-                IProviderItem sp = spdm[id];
+                IRepositoryItem pkg = pdm[id];
+                IRepositoryItem sp = spdm[id];
 
-                IProviderItem item;
+                IRepositoryItem item;
                 if (pkg != null) item = pkg;
                 else if (sp != null) item = sp;
                 else

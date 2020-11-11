@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="410"
              x:Class="QSelectAvalonia.Views.PackageArtView">
-  <Grid RowDefinitions="300, Auto, Auto, Auto, *" Width="300" Height="410">
+  <Grid RowDefinitions="150, Auto, Auto, Auto, *" Width="150" Height="260">
     <Grid>
-      <Panel Width="270" Height="270" Grid.Row="0" Background="#FF000000"/>
-      <Image x:Name="PackageImage" Grid.Row="0" Source="{Binding Path=Image}" Width="270" ClipToBounds="True"/>
-      <Panel x:Name="DarkenPanel" Grid.Row="0" Width="270" Height="270" IsVisible="{Binding Path=IsDownloaded}" Background="#7F000000">
+      <Image x:Name="PackageImage" Grid.Row="0" Source="{Binding Path=Image}" Width="120" Height="120" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      <Panel x:Name="DarkenPanel" Grid.Row="0" Width="120" Height="120" IsVisible="{Binding Path=IsDownloaded}" Background="#7F000000">
         <TextBlock x:Name="TickTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Text="✓" FontSize="100" Foreground="White"/>
       </Panel>
     </Grid>

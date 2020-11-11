@@ -1,13 +1,13 @@
-﻿using LibQuakePackageManager.Databases;
+﻿using LibPackageManager.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class Package : IProviderItem
+    public class Package : IDependentRepositoryItem
     {
         #region Properties
         /// <summary>
@@ -31,28 +31,25 @@ namespace LibQuakePackageManager.Providers
         /// </summary>
         public Dictionary<string, string> Attributes { get; }
 
-        [JsonConverter(typeof(DependenciesToKeyListJsonConverter))]
-        public Dictionary<string, IProviderItem> Dependencies { get; }
-
-        /// <summary>
-        /// The directory path where this package is installed.
-        /// </summary>
-        public string InstallDirectory { get; set; } = null;
         /// <summary>
         /// True if this package has been downloaded, false otherwise.
         /// </summary>
-        public bool IsDownloaded => InstallDirectory != null;
+        public bool IsDownloaded => InstallPath != null;
+
+        public Dictionary<string, IDependentRepositoryItem> Dependencies { get; }
+
+        public string InstallPath { get; set; }
         #endregion
 
         #region Constructors
-        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null, Dictionary<string, IProviderItem> dependencies = null)
+        public Package(string id, Dictionary<string, string> attributes = default, string mD5Checksum = null, string unzipDirectory = null, string downloadUrl = null, Dictionary<string, IDependentRepositoryItem> dependencies = null)
         {
             Id = id;
             Attributes = attributes;
             MD5Checksum = mD5Checksum;
             UnzipDirectory = unzipDirectory;
             DownloadUrl = downloadUrl;
-            Dependencies = dependencies;
+            Dependencies = dependencies ?? new();
         }
         #endregion
 

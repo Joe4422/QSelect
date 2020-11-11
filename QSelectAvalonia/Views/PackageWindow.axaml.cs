@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using QSelectAvalonia.Controls;
 using QSelectAvalonia.Services;
 using System;
@@ -54,7 +54,7 @@ namespace QSelectAvalonia.Views
             // Set up attributes
             List<string> atts = package.Attributes.Where(x => x.Key != "Title" && x.Key != "Description" && x.Key != "Screenshot").Select(x => $"{x.Key}: {x.Value}").ToList();
             atts.Add($"ID: {package.Id}");
-            if (package.IsDownloaded) atts.Add($"Path: {package.InstallDirectory}");
+            if (package.IsDownloaded) atts.Add($"Path: {package.InstallPath}");
             AttributesListBox.Items = atts;
 
             // Set up description

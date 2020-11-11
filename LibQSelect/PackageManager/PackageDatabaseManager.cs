@@ -1,13 +1,14 @@
-﻿using LibQuakePackageManager.Providers;
+﻿using LibPackageManager.Managers;
+using LibPackageManager.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LibQuakePackageManager.Databases
+namespace LibQSelect.PackageManager
 {
     public class PackageDatabaseManager : BaseDatabaseManager<Package>
     {
-        public PackageDatabaseManager(string dbFilePath, List<IProvider<Package>> providers) : base(dbFilePath, providers)
+        public PackageDatabaseManager(string dbFilePath, List<IRepository<Package>> repositories) : base(dbFilePath, repositories)
         {
         }
 
@@ -49,18 +50,18 @@ namespace LibQuakePackageManager.Databases
             }
 
             // Merge dependencies
-            Dictionary<string, IProviderItem> dependencies = null;
+            Dictionary<string, IDependentRepositoryItem> dependencies = null;
             if (inferior.Dependencies is null && !(superior.Dependencies is null))
             {
-                dependencies = new Dictionary<string, IProviderItem>(superior.Dependencies);
+                dependencies = new Dictionary<string, IDependentRepositoryItem>(superior.Dependencies);
             }
             else if (!(inferior.Dependencies is null) && superior.Dependencies is null)
             {
-                dependencies = new Dictionary<string, IProviderItem>(inferior.Dependencies);
+                dependencies = new Dictionary<string, IDependentRepositoryItem>(inferior.Dependencies);
             }
             else if (!(inferior.Dependencies is null) && !(superior.Dependencies is null))
             {
-                dependencies = new Dictionary<string, IProviderItem>(inferior.Dependencies);
+                dependencies = new Dictionary<string, IDependentRepositoryItem>(inferior.Dependencies);
                 foreach (string s in superior.Dependencies.Keys)
                 {
                     dependencies[s] = superior.Dependencies[s];
@@ -68,11 +69,11 @@ namespace LibQuakePackageManager.Databases
             }
 
             // Determine install directory
-            string installDirectory = superior.InstallDirectory is null ? inferior.InstallDirectory : superior.InstallDirectory;
+            string installPath = superior.InstallPath is null ? inferior.InstallPath : superior.InstallPath;
 
             Package package = new Package(superior.Id, attributes, md5Checksum, unzipDirectory, downloadUrl, dependencies)
             {
-                InstallDirectory = installDirectory
+                InstallPath = installPath
             };
 
             return package;

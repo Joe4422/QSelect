@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using System;
 using System.Collections.Generic;
 using System.IO;

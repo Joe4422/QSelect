@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="MainWindow.axaml~RF13588c6a.TMP" />
@@ -14,7 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibQSelect\LibQSelect.csproj" />
-    <ProjectReference Include="..\LibQuakePackageManager\LibQuakePackageManager.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Controls\PackageListPager.axaml.cs">

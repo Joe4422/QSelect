@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using QSelectAvalonia.Views;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,8 @@ namespace QSelectAvalonia.Controls
 
         protected List<Package> packages;
 
+        protected List<PackageArtView> pkgArtViews = new();
+
         protected bool isPackageWindowInUse = false;
 
         protected const int packagesPerLoad = 50;
@@ -34,6 +36,11 @@ namespace QSelectAvalonia.Controls
         {
             this.packages = packages;
 
+            foreach (Package pkg in packages)
+            {
+                pkgArtViews.Add(new PackageArtView(pkg));
+            }
+
             LoadNextPackageSetAsync().ConfigureAwait(false);
             PackageScrollViewer.ScrollToHome();
         }
@@ -42,9 +49,8 @@ namespace QSelectAvalonia.Controls
         {
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                foreach (Package package in packages.GetRange(numLoads * packagesPerLoad, packagesPerLoad))
+                foreach (PackageArtView pav in pkgArtViews.GetRange(numLoads * packagesPerLoad, packagesPerLoad))
                 {
-                    PackageArtView pav = new PackageArtView(package);
                     pav.Tapped += Pav_Tapped;
                     PackageWrapPanel.Children.Add(pav);
                 }

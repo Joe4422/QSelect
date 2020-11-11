@@ -1,19 +1,20 @@
-﻿using System;
+﻿using LibPackageManager.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class BuiltInSourcePortProvider : IProvider<SourcePort>
+    public class BuiltInSourcePortRepository : IRepository<SourcePort>
     {
         #region Properties
         public List<SourcePort> Items { get; }
         #endregion
 
         #region Constructors
-        public BuiltInSourcePortProvider()
+        public BuiltInSourcePortRepository()
         {
             Items = new List<SourcePort>()
             {
@@ -152,18 +153,6 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Methods
-        public SourcePort GetItem(string id)
-        {
-            try
-            {
-                return Items.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public Task RefreshAsync()
         {
             return Task.CompletedTask;

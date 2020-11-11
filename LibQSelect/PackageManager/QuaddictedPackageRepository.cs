@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LibPackageManager.Repositories;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class QuaddictedPackageProvider : IProvider<Package>
+    public class QuaddictedPackageRepository : IRepository<Package>
     {
         #region Variables
         public string databaseUrl = "https://www.quaddicted.com/reviews/quaddicted_database.xml";
@@ -21,18 +22,6 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Methods
-        public Package GetItem(string id)
-        {
-            try
-            {
-                return Items.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public async Task RefreshAsync()
         {
             string databaseText;
@@ -58,7 +47,7 @@ namespace LibQuakePackageManager.Providers
                         if (node.Name == "file")
                         {
                             Dictionary<string, string> attributes;
-                            Dictionary<string, IProviderItem> dependencies = new Dictionary<string, IProviderItem>() { { "id1", null } };
+                            Dictionary<string, IDependentRepositoryItem> dependencies = new Dictionary<string, IDependentRepositoryItem>() { { "id1", null } };
 
                             // Determine rating
                             string rating = null;

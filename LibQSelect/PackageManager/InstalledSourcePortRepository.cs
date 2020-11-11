@@ -1,13 +1,14 @@
-﻿using System;
+﻿using LibPackageManager.Repositories;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class LocalSourcePortProvider : IProvider<SourcePort>
+    public class InstalledSourcePortRepository : IRepository<SourcePort>
     {
         #region Variables
         protected string sourcePortDirPath;
@@ -18,25 +19,13 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Constructors
-        public LocalSourcePortProvider(string sourcePortDirPath)
+        public InstalledSourcePortRepository(string sourcePortDirPath)
         {
             this.sourcePortDirPath = sourcePortDirPath ?? throw new ArgumentNullException(nameof(sourcePortDirPath));
         }
         #endregion Constructors
 
         #region Methods
-        public SourcePort GetItem(string id)
-        {
-            try
-            {
-                return Items.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public async Task RefreshAsync()
         {
             // Check directory exists
@@ -45,7 +34,7 @@ namespace LibQuakePackageManager.Providers
             // Clear existing source port list
             Items.Clear();
 
-            // Load packages by directory name
+            // Load source ports by directory name
             await Task.Run(() =>
             {
                 foreach (string id in Directory.GetDirectories(sourcePortDirPath).Select(x => Path.GetFileName(x)))
@@ -59,8 +48,10 @@ namespace LibQuakePackageManager.Providers
                         "macos" => SourcePort.OperatingSystem.MacOS,
                         _ => SourcePort.OperatingSystem.Unknown
                     };
-                    SourcePort sourcePort = new SourcePort(id, os: os);
-                    sourcePort.InstallDirectory = $"{sourcePortDirPath}/{id}";
+                    SourcePort sourcePort = new SourcePort(id, os: os)
+                    {
+                        InstallPath = $"{sourcePortDirPath}/{id}"
+                    };
 
                     Items.Add(sourcePort);
                 }

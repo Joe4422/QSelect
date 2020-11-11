@@ -1,5 +1,4 @@
-﻿using LibQuakePackageManager.Databases;
-using LibQuakePackageManager.Providers;
+﻿using LibPackageManager.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +6,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQuakePackageManager.Downloads
+namespace LibQSelect.PackageManager
 {
     public class SourcePortDownloadManager : BaseDownloadManager<SourcePort>
     {

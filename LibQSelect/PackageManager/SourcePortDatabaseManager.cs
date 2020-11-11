@@ -1,15 +1,16 @@
-﻿using LibQuakePackageManager.Providers;
+﻿using LibPackageManager.Managers;
+using LibPackageManager.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQuakePackageManager.Databases
+namespace LibQSelect.PackageManager
 {
     public class SourcePortDatabaseManager : BaseDatabaseManager<SourcePort>
     {
-        public SourcePortDatabaseManager(string dbFilePath, List<IProvider<SourcePort>> providers) : base(dbFilePath, providers)
+        public SourcePortDatabaseManager(string dbFilePath, List<IRepository<SourcePort>> repositories) : base(dbFilePath, repositories)
         {
         }
 
@@ -37,12 +38,12 @@ namespace LibQuakePackageManager.Databases
             // Determine operating system
             SourcePort.OperatingSystem supportedOS = superior.SupportedOS == SourcePort.OperatingSystem.Unknown ? inferior.SupportedOS : superior.SupportedOS;
 
-            // Determine install directory
-            string installDirectory = superior.InstallDirectory is null ? inferior.InstallDirectory : superior.InstallDirectory;
+            // Determine install path
+            string installPath = superior.InstallPath is null ? inferior.InstallPath : superior.InstallPath;
 
-            SourcePort sourcePort = new SourcePort(superior.Id, name, author, executable, downloadUrl, supportedOS)
+            SourcePort sourcePort = new(superior.Id, name, author, executable, downloadUrl, supportedOS)
             {
-                InstallDirectory = installDirectory
+                InstallPath = installPath
             };
 
             return sourcePort;

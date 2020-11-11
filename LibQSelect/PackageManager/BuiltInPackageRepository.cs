@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LibPackageManager.Repositories;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class BuiltInPackageProvider : IProvider<Package>
+    public class BuiltInPackageRepository : IRepository<Package>
     {
         #region Properties
         public List<Package> Items { get; }
         #endregion
 
         #region Constructors
-        public BuiltInPackageProvider()
+        public BuiltInPackageRepository()
         {
             Items = new List<Package>()
             {
@@ -40,7 +41,7 @@ namespace LibQuakePackageManager.Providers
                         { "Release Date", "05.03.97" },
                         { "Screenshot", "https://static.wikia.nocookie.net/quake/images/f/f6/QSALogo.JPG" }
                     },
-                    dependencies: new Dictionary<string, IProviderItem> { { "id1", null } }
+                    dependencies: new Dictionary<string, IDependentRepositoryItem> { { "id1", null } }
                 ),
                 new Package
                 (
@@ -53,25 +54,13 @@ namespace LibQuakePackageManager.Providers
                         { "Release Date", "19.03.97" },
                         { "Screenshot", "https://static.wikia.nocookie.net/quake/images/2/2d/QDELogo.JPG" }
                     },
-                    dependencies: new Dictionary<string, IProviderItem> { { "id1", null } }
+                    dependencies: new Dictionary<string, IDependentRepositoryItem> { { "id1", null } }
                 )
             };
         }
         #endregion
 
         #region Methods
-        public Package GetItem(string id)
-        {
-            try
-            {
-                return Items.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public Task RefreshAsync()
         {
             return Task.CompletedTask;

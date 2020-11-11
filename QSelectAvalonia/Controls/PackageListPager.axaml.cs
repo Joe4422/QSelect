@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using QSelectAvalonia.Views;
 using System;
 using System.Collections.Generic;

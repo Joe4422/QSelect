@@ -1,6 +1,5 @@
-﻿using LibQuakePackageManager.Databases;
-using LibQuakePackageManager.Downloads;
-using LibQuakePackageManager.Providers;
+﻿using LibPackageManager.Repositories;
+using LibQSelect.PackageManager;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,15 +16,15 @@ namespace LibQSelect
         #endregion
 
         #region Properties
-        public PackageDownloadManager PackageDownloadManager { get; }
-        public SourcePortDownloadManager SourcePortDownloadManager { get; }
+        public PackageDownloadManager PackageManager { get; }
+        public SourcePortDownloadManager SourcePortManager { get; }
         #endregion
 
         #region Events
-        public delegate void DownloadStartedEventHandler(object sender, IProviderItem item);
+        public delegate void DownloadStartedEventHandler(object sender, IRepositoryItem item);
         public event DownloadStartedEventHandler DownloadStarted;
 
-        public delegate void DownloadFinishedEventHandler(object sender, IProviderItem item);
+        public delegate void DownloadFinishedEventHandler(object sender, IRepositoryItem item);
         public event DownloadFinishedEventHandler DownloadFinished;
         #endregion
 
@@ -36,27 +35,27 @@ namespace LibQSelect
             this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
             this.spdm = spdm ?? throw new ArgumentNullException(nameof(spdm));
 
-            PackageDownloadManager = new PackageDownloadManager(this.settings.DownloadsPath, this.settings.PackagesPath);
-            SourcePortDownloadManager = new SourcePortDownloadManager(this.settings.DownloadsPath, this.settings.SourcePortsPath);
+            PackageManager = new PackageDownloadManager(this.settings.DownloadsPath, this.settings.PackagesPath);
+            SourcePortManager = new SourcePortDownloadManager(this.settings.DownloadsPath, this.settings.SourcePortsPath);
         }
         #endregion
 
         #region Methods
-        public async Task<string> DownloadItemAsync(IProviderItem item)
+        public async Task<bool> DownloadItemAsync(IRepositoryItem item)
         {
             if (item is Package package)
             {
-                DownloadStarted.Invoke(this, item);
-                string s = await PackageDownloadManager.DownloadItemAsync(package);
-                DownloadFinished.Invoke(this, item);
-                return s;
+                DownloadStarted?.Invoke(this, item);
+                bool result = await PackageManager.GetItemAsync(package);
+                DownloadFinished?.Invoke(this, item);
+                return result;
             }
             else if (item is SourcePort sourcePort)
             {
-                DownloadStarted.Invoke(this, item);
-                string s = await SourcePortDownloadManager.DownloadItemAsync(sourcePort);
-                DownloadFinished.Invoke(this, item);
-                return s;
+                DownloadStarted?.Invoke(this, item);
+                bool result = await SourcePortManager.GetItemAsync(sourcePort);
+                DownloadFinished?.Invoke(this, item);
+                return result;
             }
             else
             {

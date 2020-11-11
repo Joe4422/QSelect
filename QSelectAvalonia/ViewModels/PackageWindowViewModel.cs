@@ -1,4 +1,4 @@
-﻿using LibQuakePackageManager.Providers;
+﻿using LibQSelect.PackageManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace QSelectAvalonia.ViewModels
             {
                 List<string> atts = Package.Attributes.Where(x => x.Key != "Title" && x.Key != "Description" && x.Key != "Screenshot").Select(x => $"{x.Key}: {x.Value}").ToList();
                 atts.Add($"ID: {Package.Id}");
-                if (Package.IsDownloaded) atts.Add($"Path: {Package.InstallDirectory}");
+                if (Package.IsDownloaded) atts.Add($"Path: {Package.InstallPath}");
 
                 return atts;
             }

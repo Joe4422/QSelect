@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LibPackageManager.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class SourcePort : IProviderItem
+    public class SourcePort : IRepositoryItem
     {
         #region Enums
         public enum OperatingSystem
@@ -44,16 +45,14 @@ namespace LibQuakePackageManager.Providers
         /// </summary>
         public OperatingSystem SupportedOS { get; }
 
-        public Dictionary<string, IProviderItem> Dependencies { get; }
-
         /// <summary>
         /// True if source port has been downloaded, false otherwise.
         /// </summary>
-        public bool IsDownloaded => InstallDirectory != null;
+        public bool IsDownloaded => InstallPath != null;
         /// <summary>
         /// Directory in which the source port is installed.
         /// </summary>
-        public string InstallDirectory { get; set; } = null;
+        public string InstallPath { get; set; } = null;
         #endregion
 
         #region Constructors
@@ -65,7 +64,6 @@ namespace LibQuakePackageManager.Providers
             Executable = executable;
             DownloadUrl = downloadUrl;
             SupportedOS = os;
-            Dependencies = null;
         }
         #endregion
     }

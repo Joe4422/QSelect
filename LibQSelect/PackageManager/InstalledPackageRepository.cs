@@ -1,12 +1,13 @@
-﻿using System;
+﻿using LibPackageManager.Repositories;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LibQuakePackageManager.Providers
+namespace LibQSelect.PackageManager
 {
-    public class LocalPackageProvider : IProvider<Package>
+    public class InstalledPackageRepository : IRepository<Package>
     {
         #region Variables
         protected string packageDirPath;
@@ -17,25 +18,13 @@ namespace LibQuakePackageManager.Providers
         #endregion
 
         #region Constructors
-        public LocalPackageProvider(string packageDirPath)
+        public InstalledPackageRepository(string packageDirPath)
         {
             this.packageDirPath = packageDirPath ?? throw new ArgumentNullException(nameof(packageDirPath));
         }
         #endregion
 
         #region Methods
-        public Package GetItem(string id)
-        {
-            try
-            {
-                return Items.First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public async Task RefreshAsync()
         {
             // Check directory exists
@@ -51,7 +40,7 @@ namespace LibQuakePackageManager.Providers
                 {
                     Package package = new Package(id)
                     {
-                        InstallDirectory = $"{packageDirPath}/{id}"
+                        InstallPath = $"{packageDirPath}/{id}"
                     };
 
                     Items.Add(package);

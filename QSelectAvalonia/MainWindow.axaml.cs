@@ -1,9 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using LibPackageManager.Repositories;
 using LibQSelect;
-using LibQuakePackageManager.Databases;
-using LibQuakePackageManager.Providers;
+using LibQSelect.PackageManager;
 using QSelectAvalonia.Controls;
 using QSelectAvalonia.Views;
 using System.Collections.Generic;
@@ -32,19 +32,19 @@ namespace QSelectAvalonia
 
         protected async Task InitPackageListAsync()
         {
-            List<IProvider<Package>> packageProviders = new List<IProvider<Package>>()
+            List<IRepository<Package>> packageRepositories = new()
             {
-                new LocalPackageProvider("Packages"),
-                new BuiltInPackageProvider(),
-                new QuaddictedPackageProvider()
+                new InstalledPackageRepository("Packages"),
+                new BuiltInPackageRepository(),
+                new QuaddictedPackageRepository()
             };
-            List<IProvider<SourcePort>> sourcePortProviders = new List<IProvider<SourcePort>>()
+            List<IRepository<SourcePort>> sourcePortRepositories = new()
             {
-                new LocalSourcePortProvider("SourcePorts"),
-                new BuiltInSourcePortProvider()
+                new InstalledSourcePortRepository("SourcePorts"),
+                new BuiltInSourcePortRepository()
             };
-            pdm = new PackageDatabaseManager("packages.json", packageProviders);
-            spdm = new SourcePortDatabaseManager("sourceports.json", sourcePortProviders);
+            pdm = new PackageDatabaseManager("packages.json", packageRepositories);
+            spdm = new SourcePortDatabaseManager("sourceports.json", sourcePortRepositories);
             
             Task pdmTask = pdm.LoadDatabaseAsync();
             Task spdmTask = spdm.LoadDatabaseAsync();

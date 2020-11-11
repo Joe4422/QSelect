@@ -1,5 +1,4 @@
-﻿using LibQuakePackageManager.Databases;
-using LibQuakePackageManager.Providers;
+﻿using LibQSelect.PackageManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -79,8 +78,6 @@ namespace LibQSelect
             if (package is null) throw new ArgumentNullException(nameof(package));
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
             if (!LoadedPackages.Contains(package)) return null;
-
-            List<Package> dependencies = new List<Package>();
 
             if (await UnloadSinglePackageAsync(package) == false)
             {

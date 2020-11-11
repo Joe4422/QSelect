@@ -1,7 +1,8 @@
 {
   "profiles": {
     "QSelectConsole": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "run quakespasm-spiked-win64 id1"
     }
   }
 }

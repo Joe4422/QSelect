@@ -6,7 +6,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQSelect.PackageManager
+namespace LibQSelect.PackageManager.SourcePorts
 {
     public class SourcePortDownloadManager : BaseDownloadManager<SourcePort>
     {

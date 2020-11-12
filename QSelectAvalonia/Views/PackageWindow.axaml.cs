@@ -1,9 +1,11 @@
-﻿using Avalonia;
+﻿using ABI.Windows.UI.WebUI;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using LibQSelect.PackageManager;
+using LibQSelect.PackageManager.Packages;
+using LibQSelect.PackageManager.SourcePorts;
 using QSelectAvalonia.Controls;
 using QSelectAvalonia.Services;
 using System;
@@ -12,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Windows.UI.Text.Core;
 
 namespace QSelectAvalonia.Views
 {
@@ -75,30 +78,35 @@ namespace QSelectAvalonia.Views
             // Load image
             DisplayImageAsync().ConfigureAwait(false);
 
+            if (package.IsDownloaded)
+            {
+                PlayNowButton.IsEnabled = true;
+                DownloadButton.IsEnabled = false;
+            }
+            else
+            {
+                PlayNowButton.IsEnabled = false;
+                DownloadButton.IsEnabled = true;
+            }
+
         }
 
         protected async Task DisplayImageAsync()
         {
-            byte[] imageData = await PackageImageService.GetBitmapAsync(Package);
             // Set package image
-            if (imageData != null && Package.Attributes.ContainsKey("Screenshot"))
-            {
-                ImageImage.IsVisible = false;
-                using MemoryStream ms = new MemoryStream(imageData);
-                try
-                {
-                    Bitmap bitmap = new Bitmap(ms);
+            ImageImage.IsVisible = false;
 
-                    ImageImage.Source = bitmap;
-                    ImageImage.IsVisible = true;
-                    ScrollViewer.ScrollToHome();
-                }
-                catch (Exception) { }
-            }
-            else
+            if (ImageImage.Source != null)
             {
-                ImageImage.IsVisible = false;
+                (ImageImage.Source as Bitmap).Dispose();
             }
+
+            if (Package.Attributes.ContainsKey("ScreenshotURL"))
+            {
+                ImageImage.Source = await PackageImageService.GetScreenshotAsync(Package);
+                if (ImageImage.Source != null) ImageImage.IsVisible = true;
+            }
+            ScrollViewer.ScrollToHome();
         }
 
         private void InitializeComponent()
@@ -116,8 +124,39 @@ namespace QSelectAvalonia.Views
             PlayNowButton = this.FindControl<Button>("PlayNowButton");
             DownloadButton = this.FindControl<Button>("DownloadButton");
 
-            PlayNowButton.Click += (a, b) => RunPackage.Invoke(this, Package);
-            DownloadButton.Click += (a, b) => DownloadPackage.Invoke(this, Package);
+            PlayNowButton.Click += PlayNowButton_ClickAsync;
+            DownloadButton.Click += DownloadButton_ClickAsync;
+        }
+
+        private async void DownloadButton_ClickAsync(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (Package.IsDownloaded) return;
+            else
+            {
+                await DownloadService.Packages.GetItemAsync(Package);
+                PlayNowButton.IsEnabled = true;
+                DownloadButton.IsEnabled = false;
+            }
+        }
+
+        private async void PlayNowButton_ClickAsync(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (!Package.IsDownloaded) return;
+            else
+            {
+                SourcePort port = DatabaseService.SourcePorts["quakespasm-spiked-win64"];
+                if (port.IsDownloaded == false)
+                {
+                    await DownloadService.SourcePorts.GetItemAsync(port);
+                }
+                GameService.Game.LoadSourcePort(port);
+
+                await GameService.Game.LoadPackageAsync(Package.Id, Package);
+
+                await GameService.Game.ExecuteLoadedSourcePortAsync();
+
+                await GameService.Game.UnloadAllPackagesAsync();
+            }
         }
     }
 }

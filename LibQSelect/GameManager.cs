@@ -1,4 +1,5 @@
-﻿using LibQSelect.PackageManager;
+﻿using LibQSelect.PackageManager.Packages;
+using LibQSelect.PackageManager.SourcePorts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,18 +38,20 @@ namespace LibQSelect
             LoadedSourcePort = sourcePort ?? throw new ArgumentNullException(nameof(sourcePort));
         }
 
-        public async Task<string> LoadPackageAsync(Package package)
+        public async Task<string> LoadPackageAsync(string id, Package package)
         {
-            if (package is null) throw new ArgumentNullException(nameof(package));
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
 
-            List<Task> loadTasks = new List<Task>();
+            List<Task<string>> loadTasks = new();
 
-            loadTasks.Add(LoadSinglePackageAsync(package));
+            if (await LoadSinglePackageAsync(package) == false)
+            {
+                return id;
+            }
 
             foreach (string key in package.Dependencies.Keys)
             {
-                loadTasks.Add(LoadPackageAsync(package.Dependencies[key] as Package));
+                loadTasks.Add(LoadPackageAsync(key, package.Dependencies[key] as Package));
             }
 
             await Task.WhenAll(loadTasks);
@@ -56,9 +59,10 @@ namespace LibQSelect
             return null;
         }
 
-        protected async Task LoadSinglePackageAsync(Package package)
+        protected async Task<bool> LoadSinglePackageAsync(Package package)
         {
-            if (LoadedPackages.Contains(package)) return;
+            if (LoadedPackages.Contains(package)) return true;
+            else if (package is null) return false;
 
             await Task.Run(() =>
             {
@@ -71,6 +75,8 @@ namespace LibQSelect
 
             // Add to list
             LoadedPackages.Add(package);
+
+            return true;
         }
 
         public async Task<string> UnloadPackageAsync(Package package)
@@ -124,11 +130,11 @@ namespace LibQSelect
             return true;
         }
 
-        public void UnloadAllPackages()
+        public async Task UnloadAllPackagesAsync()
         {
             foreach (Package pkg in LoadedPackages.ToList())
             {
-                UnloadSinglePackageAsync(pkg, true).Wait();
+                await UnloadSinglePackageAsync(pkg, true);
             }
         }
 

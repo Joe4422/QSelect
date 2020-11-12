@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQSelect.PackageManager
+namespace LibQSelect.PackageManager.SourcePorts
 {
     public class BuiltInSourcePortRepository : IRepository<SourcePort>
     {
         #region Properties
         public List<SourcePort> Items { get; }
+        public RepositoryDataSource DataSource => RepositoryDataSource.Local;
         #endregion
 
         #region Constructors

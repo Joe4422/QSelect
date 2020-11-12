@@ -8,7 +8,7 @@
   <Grid RowDefinitions="*, Auto">
     <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" VerticalScrollBarVisibility="Visible">
       <Grid RowDefinitions="Auto, Auto, *" Background="White" Width="{Binding $parent[ScrollViewer].Bounds.Width}" >
-        <DockPanel Grid.Row="0" Height="500" Background="Black">
+        <DockPanel Grid.Row="0" MaxHeight="500" Background="Black">
           <Image x:Name="ImageImage" Width="{Binding $parent[Grid].Bounds.Width}" DockPanel.Dock="Bottom" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </DockPanel>
         <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Background="#9F000000" VerticalAlignment="Bottom" Text="Example Title Goes Here" TextWrapping="Wrap" FontSize="32" FontWeight="Bold" Padding="5" Foreground="White"/>

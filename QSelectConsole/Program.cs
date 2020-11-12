@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using LibQSelect.PackageManager;
 using LibQSelect;
 using LibPackageManager.Repositories;
+using LibQSelect.PackageManager.Packages;
+using LibQSelect.PackageManager.SourcePorts;
 
 namespace QSelectConsole
 {

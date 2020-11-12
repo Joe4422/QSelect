@@ -7,7 +7,7 @@
              x:Class="QSelectAvalonia.Controls.PackageArtViewList">
   <Grid>
     <ScrollViewer x:Name="PackageScrollViewer" VerticalScrollBarVisibility="Visible">
-      <WrapPanel x:Name="PackageWrapPanel" Width="{Binding $parent[Grid].Bounds.Width}" MaxWidth="1500"/>
+      <WrapPanel x:Name="PackageWrapPanel" MaxWidth="1500"/>
     </ScrollViewer>
     <Panel x:Name="DarkenPanel" Background="#7F000000" IsVisible="False">
       <Grid ColumnDefinitions="*, 5*, *" RowDefinitions="*, 5*, *">

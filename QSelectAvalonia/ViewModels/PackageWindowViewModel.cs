@@ -1,4 +1,4 @@
-﻿using LibQSelect.PackageManager;
+﻿using LibQSelect.PackageManager.Packages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

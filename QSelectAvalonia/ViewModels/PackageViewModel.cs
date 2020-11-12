@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using LibQSelect.PackageManager;
+using LibQSelect.PackageManager.Packages;
 using QSelectAvalonia.Services;
 using ReactiveUI;
 using System;
@@ -22,11 +22,11 @@ namespace QSelectAvalonia.ViewModels
         public string Author => Package.GetAttribute("Author") ?? "";
         public string Rating => Package.GetAttribute("Rating") ?? "";
 
-        protected IImage image = null;
-        public IImage Image
+        protected IImage thumbnail = null;
+        public IImage Thumbnail
         {
-            get => image;
-            set => this.RaiseAndSetIfChanged(ref image, value);
+            get => thumbnail;
+            set => this.RaiseAndSetIfChanged(ref thumbnail, value);
         }
 
         public bool HasAuthor => Author != "";
@@ -43,11 +43,11 @@ namespace QSelectAvalonia.ViewModels
         #endregion
 
         #region Methods
-        public async Task LoadImageAsync(int imageSideLength)
+        public async Task LoadThumbnailAsync(int imageSideLength)
         {
-            if (Package.HasAttribute("Screenshot"))
+            if (Package.HasAttribute("ThumbnailURL"))
             {
-                Image = await PackageImageService.GetThumbnailAsync(Package, imageSideLength);
+                Thumbnail = await PackageImageService.GetThumbnailAsync(Package, imageSideLength);
             }
         }
         #endregion

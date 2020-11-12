@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using LibQSelect.PackageManager;
+using LibQSelect.PackageManager.Packages;
 using QSelectAvalonia.ViewModels;
 using System.IO;
 using System.Net;
@@ -28,9 +28,7 @@ namespace QSelectAvalonia.Views
         {
             ViewModel = new PackageViewModel(package);
 
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-
-            ViewModel.LoadImageAsync(imageSideLength).ConfigureAwait(false);
+            ViewModel.LoadThumbnailAsync(imageSideLength).ConfigureAwait(false);
 
             DataContext = ViewModel;
         }
@@ -39,14 +37,14 @@ namespace QSelectAvalonia.Views
         {
             if (e.PropertyName == "Imaage")
             {
-                if (ViewModel.Image.Size.Width > ViewModel.Image.Size.Height)
+                if (ViewModel.Thumbnail.Size.Width > ViewModel.Thumbnail.Size.Height)
                 {
-                    int x = ((int)ViewModel.Image.Size.Width - imageSideLength) / 2;
+                    int x = ((int)ViewModel.Thumbnail.Size.Width - imageSideLength) / 2;
                     PackageImage.Clip = new RectangleGeometry(new Rect(x, 0, imageSideLength, imageSideLength));
                 }
                 else
                 {
-                    int y = ((int)ViewModel.Image.Size.Height - imageSideLength) / 2;
+                    int y = ((int)ViewModel.Thumbnail.Size.Height - imageSideLength) / 2;
                     PackageImage.Clip = new RectangleGeometry(new Rect(0, y, imageSideLength, imageSideLength));
                 }
             }

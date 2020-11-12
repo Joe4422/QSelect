@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibQSelect.PackageManager
+namespace LibQSelect.PackageManager.SourcePorts
 {
     public class InstalledSourcePortRepository : IRepository<SourcePort>
     {
@@ -15,7 +15,10 @@ namespace LibQSelect.PackageManager
         #endregion
 
         #region Properties
+        public RepositoryDataSource DataSource => RepositoryDataSource.Local;
+
         public List<SourcePort> Items { get; } = new List<SourcePort>();
+
         #endregion
 
         #region Constructors

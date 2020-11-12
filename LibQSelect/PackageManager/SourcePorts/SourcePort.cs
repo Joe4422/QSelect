@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LibQSelect.PackageManager
+namespace LibQSelect.PackageManager.SourcePorts
 {
     public class SourcePort : IRepositoryItem
     {
@@ -58,7 +58,7 @@ namespace LibQSelect.PackageManager
         #region Constructors
         public SourcePort(string id, string name = null, string author = null, string executable = null, string downloadUrl = null, OperatingSystem os = OperatingSystem.Unknown)
         {
-            Id = id;
+            Id = id ?? throw new ArgumentNullException(nameof(id));
             Name = name;
             Author = author;
             Executable = executable;

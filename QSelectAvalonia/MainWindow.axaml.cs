@@ -3,8 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using LibPackageManager.Repositories;
 using LibQSelect;
-using LibQSelect.PackageManager;
+using LibQSelect.PackageManager.Packages;
+using LibQSelect.PackageManager.SourcePorts;
 using QSelectAvalonia.Controls;
+using QSelectAvalonia.Services;
 using QSelectAvalonia.Views;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +21,6 @@ namespace QSelectAvalonia
         protected TabItem DownloadsTabItem;
         protected TabItem SettingsTabItem;
 
-        protected PackageDatabaseManager pdm;
-        protected SourcePortDatabaseManager spdm;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -32,26 +31,11 @@ namespace QSelectAvalonia
 
         protected async Task InitPackageListAsync()
         {
-            List<IRepository<Package>> packageRepositories = new()
-            {
-                new InstalledPackageRepository("Packages"),
-                new BuiltInPackageRepository(),
-                new QuaddictedPackageRepository()
-            };
-            List<IRepository<SourcePort>> sourcePortRepositories = new()
-            {
-                new InstalledSourcePortRepository("SourcePorts"),
-                new BuiltInSourcePortRepository()
-            };
-            pdm = new PackageDatabaseManager("packages.json", packageRepositories);
-            spdm = new SourcePortDatabaseManager("sourceports.json", sourcePortRepositories);
-            
-            Task pdmTask = pdm.LoadDatabaseAsync();
-            Task spdmTask = spdm.LoadDatabaseAsync();
+            await DatabaseService.InitialiseAsync("Packages", "SourcePorts", "Thumbnails");
+            DownloadService.Initialise("Downloads", "Packages", "SourcePorts", "Thumbnails");
+            GameService.Initialise(new Settings(), DatabaseService.Packages);
 
-            await Task.WhenAll(pdmTask, spdmTask);
-
-            PackagesTabItem.Content = new PackageArtViewList(pdm.Items);
+            PackagesTabItem.Content = new PackageArtViewList(DatabaseService.Packages.Items);
         }
 
         private void InitializeComponent()

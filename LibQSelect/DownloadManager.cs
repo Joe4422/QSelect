@@ -1,5 +1,6 @@
 ﻿using LibPackageManager.Repositories;
-using LibQSelect.PackageManager;
+using LibQSelect.PackageManager.Packages;
+using LibQSelect.PackageManager.SourcePorts;
 using System;
 using System.Collections.Generic;
 using System.Text;

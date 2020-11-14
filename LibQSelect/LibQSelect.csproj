@@ -12,9 +12,6 @@
     <None Remove="GameManager.cs~RF128064a9.TMP" />
     <None Remove="IAppSettings.cs~RFad1a079.TMP" />
     <None Remove="IAppSettings.cs~RFbe3210.TMP" />
-    <None Remove="PackageManager\Thumbnails\PackageThumbnailRepository.cs~RF29038590.TMP" />
-    <None Remove="PackageManager\Thumbnails\Thumbnail.cs~RF28fb5649.TMP" />
-    <None Remove="PackageManager\Thumbnails\ThumbnailDatabaseManager.cs~RF2906046b.TMP" />
     <None Remove="QSelect.cs~RF1a862e8f.TMP" />
     <None Remove="QSelect.cs~RF9bd8f80.TMP" />
   </ItemGroup>

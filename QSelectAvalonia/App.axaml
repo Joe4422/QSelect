@@ -4,5 +4,8 @@
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+		<Style Selector="Panel.page">
+			<Setter Property="Background" Value="#211F20"/>
+		</Style>
     </Application.Styles>
 </Application>

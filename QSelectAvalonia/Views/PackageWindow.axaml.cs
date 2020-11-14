@@ -133,7 +133,7 @@ namespace QSelectAvalonia.Views
             if (Package.IsDownloaded) return;
             else
             {
-                await DownloadService.Packages.GetItemAsync(Package);
+                await DownloadService.DownloadItemAsync(Package);
                 PlayNowButton.IsEnabled = true;
                 DownloadButton.IsEnabled = false;
             }
@@ -147,7 +147,7 @@ namespace QSelectAvalonia.Views
                 SourcePort port = DatabaseService.SourcePorts["quakespasm-spiked-win64"];
                 if (port.IsDownloaded == false)
                 {
-                    await DownloadService.SourcePorts.GetItemAsync(port);
+                    await DownloadService.DownloadItemAsync(port);
                 }
                 GameService.Game.LoadSourcePort(port);
 

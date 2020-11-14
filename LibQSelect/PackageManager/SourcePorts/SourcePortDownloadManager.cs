@@ -21,6 +21,8 @@ namespace LibQSelect.PackageManager.SourcePorts
             Directory.CreateDirectory(extractDir);
 
             await Task.Run(() => ZipFile.ExtractToDirectory(downloadedFilePath, extractDir));
+
+            item.InstallPath = $"{installDir}/{item.Id}";
         }
     }
 }

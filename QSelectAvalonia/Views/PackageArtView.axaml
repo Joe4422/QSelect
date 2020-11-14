@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="410"
              x:Class="QSelectAvalonia.Views.PackageArtView">
-	<Grid RowDefinitions="300, Auto, Auto, Auto, *" Width="300" Height="410">
+	<Grid Classes="page" RowDefinitions="300, Auto, Auto, Auto, *" Width="300" Height="410">
 		<Grid>
 			<Panel Width="270" Height="270" Grid.Row="0" Background="#FF000000"/>
 			<Canvas Width="270" Height="270" Grid.Row="0" ClipToBounds="True">
@@ -14,7 +14,7 @@
 				<TextBlock x:Name="TickTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Text="✓" FontSize="100" Foreground="White"/>
 			</Panel>
 		</Grid>
-		<TextBlock x:Name="TitleTextBlock" Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Path=Title}" FontSize="20" TextWrapping="Wrap" TextAlignment="Center"/>
+		<TextBlock x:Name="TitleTextBlock" Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Path=Title}" FontSize="20" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
 		<TextBlock x:Name="AuthorTextBlock" Grid.Row="2" HorizontalAlignment="Center" Text="{Binding Path=Author}" IsVisible="{Binding Path=HasAuthor}" FontSize="20" Foreground="DarkGray" TextTrimming="CharacterEllipsis"/>
 		<TextBlock x:Name="RatingTextBlock" Grid.Row="3" HorizontalAlignment="Center" Text="{Binding Path=Rating}" IsVisible="{Binding Path=HasRating}" FontSize="20" Foreground="DarkGray" TextTrimming="CharacterEllipsis"/>
 	</Grid>

@@ -44,17 +44,17 @@ namespace LibQSelect
 
             List<Task<string>> loadTasks = new();
 
+            foreach (string key in package.Dependencies.Keys)
+            {
+                loadTasks.Add(LoadPackageAsync(key, package.Dependencies[key] as Package));
+            }
+            await Task.WhenAll(loadTasks);
+
             if (await LoadSinglePackageAsync(package) == false)
             {
                 return id;
             }
 
-            foreach (string key in package.Dependencies.Keys)
-            {
-                loadTasks.Add(LoadPackageAsync(key, package.Dependencies[key] as Package));
-            }
-
-            await Task.WhenAll(loadTasks);
 
             return null;
         }
@@ -138,7 +138,7 @@ namespace LibQSelect
             }
         }
 
-        public async Task ExecuteLoadedSourcePortAsync()
+        public async Task ExecuteLoadedSourcePortAsync(string args = "+map start")
         {
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
             if (LoadedPackages.Count == 0) throw new Exception($"{nameof(LoadedPackages)} was empty.");
@@ -148,6 +148,11 @@ namespace LibQSelect
             foreach (Package pkg in LoadedPackages)
             {
                 sb.Append($"-game {pkg.Id} ");
+            }
+
+            if (args != null)
+            {
+                sb.Append(args);
             }
 
             // Get current CWD

@@ -12,6 +12,11 @@ namespace QSelectAvalonia.Services
         public static GameManager Game { get; private set; } = null;
         #endregion
 
+        #region Events
+        public delegate void InitialisedEventHandler();
+        public static event InitialisedEventHandler Initialised;
+        #endregion
+
         #region Methods
         public static void Initialise(Settings settings, PackageDatabaseManager packages)
         {
@@ -21,6 +26,8 @@ namespace QSelectAvalonia.Services
             if (Game != null) throw new Exception("Attempted to re-initialise GameService.");
 
             Game = new GameManager(settings, packages);
+
+            Initialised?.Invoke();
         }
         #endregion
     }

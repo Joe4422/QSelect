@@ -1,11 +1,12 @@
 ﻿using LibPackageManager.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace LibQSelect.PackageManager.SourcePorts
 {
-    public class SourcePort : IRepositoryItem
+    public class SourcePort : IRepositoryItem, INotifyPropertyChanged
     {
         #region Enums
         public enum OperatingSystem
@@ -49,10 +50,25 @@ namespace LibQSelect.PackageManager.SourcePorts
         /// True if source port has been downloaded, false otherwise.
         /// </summary>
         public bool IsDownloaded => InstallPath != null;
+
+
         /// <summary>
         /// Directory in which the source port is installed.
         /// </summary>
-        public string InstallPath { get; set; } = null;
+        private string installPath = null; public string InstallPath
+        {
+            get => installPath;
+            set
+            {
+                installPath = value;
+                PropertyChanged?.Invoke(this, new(nameof(InstallPath)));
+                PropertyChanged?.Invoke(this, new(nameof(IsDownloaded)));
+            }
+        }
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Constructors

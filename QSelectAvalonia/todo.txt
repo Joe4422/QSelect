@@ -1,10 +1,11 @@
 ﻿TO DO:
 
 1.	Add source port display, downloading, and selection:
-	a.	Create SourcePortView view
-	b.	Create list of source ports displayed in Source Ports tab
-	c.	Add Download button that downloads the given source port
-	d.	Add Make Active button that makes the source port active when Play Now is clicked
+	a.	Create SourcePortView view - done
+	b.	Create list of source ports displayed in Source Ports tab - done
+	c.	Add Download button that downloads the given source port - done
+	d.	Add Make Active button that makes the source port active - done
+1.5	Make startup map selection more robust
 2.	Add storage of most recently active package and source port
 	a.	Add LastPackageId and LastSourcePortId members to Settings in LibQSelect
 	b.	Have the corresponding items loaded automatically at start

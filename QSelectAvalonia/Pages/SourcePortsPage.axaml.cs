@@ -30,7 +30,25 @@ namespace QSelectAvalonia.Pages
         {
             foreach (SourcePort sp in DatabaseService.SourcePorts.Items.Where(x => x.DownloadUrl != null))
             {
-                SourcePortStackPanel.Children.Add(new SourcePortView(sp));
+                SourcePortView spv = new(sp);
+                spv.Download += Spv_Download;
+                spv.MakeActive += Spv_MakeActive;
+
+                SourcePortStackPanel.Children.Add(spv);
+            }
+        }
+
+        private void Spv_MakeActive(object sender, SourcePort sourcePort)
+        {
+            GameService.Game?.LoadSourcePort(sourcePort);
+        }
+
+        private async void Spv_Download(object sender, SourcePort sourcePort)
+        {
+            if (sourcePort.IsDownloaded) return;
+            else
+            {
+                await DownloadService.DownloadItemAsync(sourcePort);
             }
         }
     }

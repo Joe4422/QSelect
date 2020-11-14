@@ -9,24 +9,24 @@
     <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" VerticalScrollBarVisibility="Visible">
       <Grid RowDefinitions="Auto, Auto, *" Background="White" Width="{Binding $parent[ScrollViewer].Bounds.Width}" >
         <DockPanel Grid.Row="0" MaxHeight="500" Background="Black">
-          <Image x:Name="ImageImage" Width="{Binding $parent[Grid].Bounds.Width}" DockPanel.Dock="Bottom" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+          <Image x:Name="ImageImage" Width="{Binding $parent[Grid].Bounds.Width}" Source="{Binding Path=Screenshot}" DockPanel.Dock="Bottom" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </DockPanel>
-        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Background="#9F000000" VerticalAlignment="Bottom" Text="Example Title Goes Here" TextWrapping="Wrap" FontSize="32" FontWeight="Bold" Padding="5" Foreground="White"/>
-        <ListBox x:Name="AttributesListBox" Background="White" Grid.Row="1" BorderThickness="0"/>
+        <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Background="#9F000000" VerticalAlignment="Bottom" Text="{Binding Path=Title}" TextWrapping="Wrap" FontSize="32" FontWeight="Bold" Padding="5" Foreground="White"/>
+        <ListBox x:Name="AttributesListBox" Items="{Binding Path=Attributes}" Background="White" Grid.Row="1" BorderThickness="0"/>
         <TabControl x:Name="TabControl" Grid.Row="2" Background="White">
           <TabItem Header="Description">
-            <ctrls:FormattedTextBlock x:Name="DescriptionTextBlock" Width="{Binding $parent[Grid].Bounds.Width}" Padding="5 5 15 5"/>
+            <TextBlock x:Name="DescriptionTextBlock" Text="{Binding Path=Description}" Width="{Binding Path=$parent[Grid].Bounds.Width}" Padding="5 5 15 5"/>
           </TabItem>
           <TabItem x:Name="DependenciesTabItem" Header="Dependencies">
-            <ListBox x:Name="DependenciesListBox" BorderThickness="0"/>
+            <ListBox x:Name="DependenciesListBox" Items="{Binding Path=Dependencies}" BorderThickness="0"/>
           </TabItem>
         </TabControl>
       </Grid>
     </ScrollViewer>
     <StackPanel Grid.Row="1" Background="LightGray">
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-        <Button x:Name="PlayNowButton" Content="Play now" VerticalAlignment="Center" Margin="0 8 4 8" IsEnabled="False"/>
-        <Button x:Name="DownloadButton" Content="Download" VerticalAlignment="Center" Margin="0 8 4 8"/>
+        <Button x:Name="PlayNowButton" Content="{Binding Path=PlayNowString}" VerticalAlignment="Center" Margin="0 8 4 8" IsEnabled="{Binding Path=PackageIsPlayable}"/>
+        <Button x:Name="DownloadButton" Content="Download" VerticalAlignment="Center" Margin="0 8 4 8" IsEnabled="{Binding Path=IsNotDownloaded}"/>
       </StackPanel>
     </StackPanel>
   </Grid>

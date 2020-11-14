@@ -1,16 +1,19 @@
 ﻿using Avalonia.Media;
+using LibQSelect;
 using LibQSelect.PackageManager.SourcePorts;
 using QSelectAvalonia.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QSelectAvalonia.ViewModels
 {
-    public class SourcePortViewModel
+    public class SourcePortViewModel : INotifyPropertyChanged
     {
+        #region Properties
         public SourcePort SourcePort { get; }
 
         public string Name => SourcePort.Name;
@@ -24,14 +27,51 @@ namespace QSelectAvalonia.ViewModels
             SourcePort.OperatingSystem.MacOS => "macOS",
             _ => "Unknown OS"
         };
-        public FontWeight NameFontWeight => !IsInactive ? FontWeight.Bold : FontWeight.Regular;
-        public bool IsDownloaded => SourcePort.IsDownloaded;
-        public bool IsNotDownloaded => !SourcePort.IsDownloaded;
-        public bool IsInactive => GameService.Game?.LoadedSourcePort != SourcePort;
 
+        public bool IsDownloaded => SourcePort.IsDownloaded;
+        public bool IsNotDownloaded => !IsDownloaded;
+
+        public bool IsInactive => GameService.Game?.LoadedSourcePort != SourcePort;
+        public bool CanMakeActive => IsInactive && IsDownloaded;
+        public FontWeight NameFontWeight => !IsInactive ? FontWeight.Bold : FontWeight.Regular;
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Constructors
         public SourcePortViewModel(SourcePort sourcePort)
         {
             SourcePort = sourcePort;
+
+            sourcePort.PropertyChanged += ModelPropertyChanged;
+            GameService.Initialised += GameService_Initialised;
         }
+        #endregion
+
+        #region Methods
+        private void GameService_Initialised()
+        {
+            GameService.Game.PropertyChanged += ModelPropertyChanged;
+        }
+
+        private void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SourcePort.IsDownloaded):
+                    PropertyChanged?.Invoke(this, new(nameof(IsDownloaded)));
+                    PropertyChanged?.Invoke(this, new(nameof(IsNotDownloaded)));
+                    PropertyChanged?.Invoke(this, new(nameof(CanMakeActive)));
+                    break;
+                case nameof(GameManager.LoadedSourcePort):
+                    PropertyChanged?.Invoke(this, new(nameof(IsInactive)));
+                    PropertyChanged?.Invoke(this, new(nameof(NameFontWeight)));
+                    PropertyChanged?.Invoke(this, new(nameof(CanMakeActive)));
+                    break;
+            }
+        }
+        #endregion
     }
 }

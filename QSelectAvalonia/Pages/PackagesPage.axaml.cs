@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using LibQSelect.PackageManager.Packages;
 using QSelectAvalonia.Controls;
 using QSelectAvalonia.Services;
@@ -16,6 +17,7 @@ namespace QSelectAvalonia.Pages
     {
         protected Panel FilterPanel;
         protected Panel PackagesPanel;
+        protected Panel PackageWindowPanel;
         protected PackageWindow PackageWindow;
         protected PackageArtViewList PackageArtViewList;
         protected TextBox SearchTextBox;
@@ -63,7 +65,10 @@ namespace QSelectAvalonia.Pages
 
         private void PackageArtViewList_PackageSelected(Package package)
         {
-            PackageWindow.DisplayPackage(package);
+            PackageWindow = new PackageWindow(package);
+
+            PackageWindowPanel.Children.Clear();
+            PackageWindowPanel.Children.Add(PackageWindow);
         }
 
         private void InitializeComponent()
@@ -72,7 +77,7 @@ namespace QSelectAvalonia.Pages
 
             FilterPanel = this.FindControl<Panel>("FilterPanel");
             PackagesPanel = this.FindControl<Panel>("PackagesPanel");
-            PackageWindow = this.FindControl<PackageWindow>("PackageWindow");
+            PackageWindowPanel = this.FindControl<Panel>("PackageWindowPanel");
 
             SearchTextBox = new TextBox() { Watermark = "Search..." };
             SearchTextBox.KeyDown += SearchTextBox_KeyDown;

@@ -14,8 +14,8 @@
 			<TextBlock Classes="secondary" MinWidth="200" Text="{Binding Path=OS}" FontSize="20" Margin="20"/>
 		</StackPanel>
 		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right">
-			<Button Width="100" Height="50" Content="Download" IsEnabled="{Binding Path=IsNotDownloaded}"/>
-			<Button Width="100" Height="50" Content="Make Active" IsEnabled="{Binding Path=IsInactive}"/>
+			<Button x:Name="DownloadButton" Width="100" Height="50" Content="Download" IsEnabled="{Binding Path=IsNotDownloaded}"/>
+			<Button x:Name="MakeActiveButton" Width="100" Height="50" Content="Make Active" IsEnabled="{Binding Path=CanMakeActive}"/>
 		</StackPanel>
 	</DockPanel>
 </UserControl>

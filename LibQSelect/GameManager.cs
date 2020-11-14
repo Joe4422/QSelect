@@ -2,6 +2,7 @@
 using LibQSelect.PackageManager.SourcePorts;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LibQSelect
 {
-    public class GameManager
+    public class GameManager : INotifyPropertyChanged
     {
         #region Variables
         protected PackageDatabaseManager pdm;
@@ -19,9 +20,29 @@ namespace LibQSelect
         #endregion
 
         #region Properties
-        public SourcePort LoadedSourcePort { get; protected set; } = null;
+        private SourcePort loadedSourcePort = null; public SourcePort LoadedSourcePort
+        {
+            get => loadedSourcePort;
+            set
+            {
+                loadedSourcePort = value;
+                PropertyChanged?.Invoke(this, new(nameof(LoadedSourcePort)));
+            }
+        }
         public List<Package> LoadedPackages { get; } = new List<Package>();
-        public bool GameRunning { get; protected set; } = false;
+        private bool gameRunning; public bool GameRunning
+        {
+            get => gameRunning;
+            protected set
+            {
+                gameRunning = value;
+                PropertyChanged?.Invoke(this, new(nameof(GameRunning)));
+            }
+        }
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Constructors

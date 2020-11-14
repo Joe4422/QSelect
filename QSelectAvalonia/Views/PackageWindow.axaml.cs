@@ -154,7 +154,7 @@ namespace QSelectAvalonia.Views
                 await GameService.Game.LoadPackageAsync(Package.Id, Package);
 
                 string args;
-                if (Package.HasAttribute("StartMaps"))
+                if (Package.HasAttribute("StartMaps") && Package.GetAttribute("StartMaps") != "")
                 {
                     args = $"+map {Package.GetAttribute("StartMaps").Split(" ", StringSplitOptions.RemoveEmptyEntries).First()}";
                 }

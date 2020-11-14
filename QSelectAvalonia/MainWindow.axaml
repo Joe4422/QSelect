@@ -5,6 +5,7 @@
         xmlns:ctrls="clr-namespace:QSelectAvalonia.Controls"
 		xmlns:pages="clr-namespace:QSelectAvalonia.Pages"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		Width="1200" Height="900"
         x:Class="QSelectAvalonia.MainWindow"
         Title="QSelect v0.1">
 	<Window.Styles>
@@ -35,6 +36,17 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style Selector="TabItem:selected">
+			<Setter Property="Background">
+				<Setter.Value>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="0,70">
+						<GradientStop Color="Transparent" Offset="0.68"/>
+						<GradientStop Color="White" Offset="0.7"/>
+						<GradientStop Color="Transparent" Offset="0.72"/>
+					</LinearGradientBrush>
+				</Setter.Value>
+			</Setter>
+		</Style>
 		<Style Selector="TabItem.QSelect">
 			<Setter Property="FontSize" Value="30"/>
 			<Setter Property="FontFamily" Value="resm:QSelectAvalonia.Assets.?assembly=QSelectAvalonia#DpQuake"/>
@@ -55,7 +67,9 @@
 	  <TabItem x:Name="HomeTabItem" Header="Qselect" Classes="QSelect">
 		  <pages:HomePage/>
 	  </TabItem>
-    <TabItem x:Name="SourcePortsTabItem" Header="Source Ports" Padding="8 10 8 8"/>
+	  <TabItem x:Name="SourcePortsTabItem" Header="Source Ports" Padding="8 10 8 8">
+		  <pages:SourcePortsPage/>
+	  </TabItem>
 	  <TabItem x:Name="PackagesTabItem" Header="Packages" Padding="8 10 8 8">
 		  <pages:PackagesPage/>
 	  </TabItem>

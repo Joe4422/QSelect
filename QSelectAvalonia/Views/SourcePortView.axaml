@@ -4,5 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="QSelectAvalonia.Views.SourcePortView">
-    Welcome to Avalonia!
+	<DockPanel HorizontalAlignment="Stretch">
+		<StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+			<Grid Height="30" Width="30">
+				<TextBlock Classes="secondary" Text="✓" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding Path=IsDownloaded}"/>
+			</Grid>
+			<TextBlock Classes="primary" MinWidth="300" Text="{Binding Path=Name}" FontSize="20" VerticalAlignment="Center" FontWeight="{Binding Path=NameFontWeight}" Margin="20"/>
+			<TextBlock Classes="secondary" MinWidth="200" Text="{Binding Path=Author}" FontSize="20" Margin="20"/>
+			<TextBlock Classes="secondary" MinWidth="200" Text="{Binding Path=OS}" FontSize="20" Margin="20"/>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right">
+			<Button Width="100" Height="50" Content="Download" IsEnabled="{Binding Path=IsNotDownloaded}"/>
+			<Button Width="100" Height="50" Content="Make Active" IsEnabled="{Binding Path=IsInactive}"/>
+		</StackPanel>
+	</DockPanel>
 </UserControl>

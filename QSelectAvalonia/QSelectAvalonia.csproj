@@ -8,6 +8,7 @@
     <None Remove="Assets\splashes.txt~RF2dd06d2c.TMP" />
     <None Remove="dpquake_.ttf" />
     <None Remove="MainWindow.axaml~RF13588c6a.TMP" />
+    <None Remove="Pages\SourcePortsPage.axaml~RF327817a3.TMP" />
     <None Remove="QSelectLogo.png" />
   </ItemGroup>
   <ItemGroup>

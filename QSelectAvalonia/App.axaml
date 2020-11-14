@@ -7,5 +7,11 @@
 		<Style Selector="Panel.page">
 			<Setter Property="Background" Value="#211F20"/>
 		</Style>
+		<Style Selector="TextBlock.primary">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="TextBlock.secondary">
+			<Setter Property="Foreground" Value="DarkGray"/>
+		</Style>
     </Application.Styles>
 </Application>

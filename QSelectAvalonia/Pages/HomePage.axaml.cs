@@ -43,6 +43,12 @@ namespace QSelectAvalonia.Pages
             AvaloniaXamlLoader.Load(this);
 
             SplashTextBlock = this.FindControl<TextBlock>("SplashTextBlock");
+            SplashTextBlock.Tapped += SplashTextBlock_Tapped;
+        }
+
+        private void SplashTextBlock_Tapped(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            GetSplashTextAsync().ConfigureAwait(false);
         }
     }
 }

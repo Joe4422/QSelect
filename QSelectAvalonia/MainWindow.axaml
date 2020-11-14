@@ -53,14 +53,7 @@
 	
   <TabControl Background="Black">
 	  <TabItem x:Name="HomeTabItem" Header="Qselect" Classes="QSelect">
-		  <Panel Classes="page">
-			  <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-				  <Grid>
-					  <Image Source="resm:QSelectAvalonia.Assets.QSelectLogo.png" HorizontalAlignment="Center" Stretch="None"/>
-					  <TextBlock x:Name="SplashTextBlock" Classes="Splash" Text="[]" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-				  </Grid>
-			  </StackPanel>
-		  </Panel>
+		  <pages:HomePage/>
 	  </TabItem>
     <TabItem x:Name="SourcePortsTabItem" Header="Source Ports" Padding="8 10 8 8"/>
 	  <TabItem x:Name="PackagesTabItem" Header="Packages" Padding="8 10 8 8">

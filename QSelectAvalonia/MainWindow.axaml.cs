@@ -23,33 +23,13 @@ namespace QSelectAvalonia
         protected TabItem PackagesTabItem;
         protected TabItem DownloadsTabItem;
         protected TabItem SettingsTabItem;
-        protected TextBlock SplashTextBlock;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            GetSplashTextAsync().ConfigureAwait(false);
-
             InitPackageListAsync().ConfigureAwait(false);
 
-        }
-
-        protected async Task GetSplashTextAsync()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resource = "QSelectAvalonia.Assets.splashes.txt";
-
-            List<string> splashes;
-
-            using (Stream stream = assembly.GetManifestResourceStream(resource))
-                using (StreamReader reader = new StreamReader(stream))
-            {
-                splashes = (await reader.ReadToEndAsync()).Split("\n").ToList();
-            }
-
-            Random random = new Random();
-            SplashTextBlock.Text = splashes[random.Next(splashes.Count)];
         }
 
         protected async Task InitPackageListAsync()
@@ -69,7 +49,6 @@ namespace QSelectAvalonia
             PackagesTabItem = this.FindControl<TabItem>("PackagesTabItem");
             DownloadsTabItem = this.FindControl<TabItem>("DownloadsTabItem");
             SettingsTabItem = this.FindControl<TabItem>("SettingsTabItem");
-            SplashTextBlock = this.FindControl<TextBlock>("SplashTextBlock");
         }
     }
 }

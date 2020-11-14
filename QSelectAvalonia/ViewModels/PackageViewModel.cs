@@ -43,11 +43,11 @@ namespace QSelectAvalonia.ViewModels
         #endregion
 
         #region Methods
-        public async Task LoadThumbnailAsync(int imageSideLength)
+        public async Task LoadThumbnailAsync()
         {
             if (Package.HasAttribute("ThumbnailURL"))
             {
-                Thumbnail = await PackageImageService.GetThumbnailAsync(Package, imageSideLength);
+                Thumbnail = await PackageImageService.GetThumbnailAsync(Package);
             }
         }
         #endregion

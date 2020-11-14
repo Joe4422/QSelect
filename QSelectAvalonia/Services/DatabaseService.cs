@@ -28,14 +28,14 @@ namespace QSelectAvalonia.Services
 
             if (Packages != null || SourcePorts != null) throw new Exception("Attempted to re-initialise DatabaseService.");
 
-            Packages = new PackageDatabaseManager($"{packagesPath}/packages.json", new()
+            Packages = new PackageDatabaseManager(new()
             {
                 new InstalledPackageRepository(packagesPath),
                 new BuiltInPackageRepository(),
                 new QuaddictedPackageRepository()
             });
             await Packages.RefreshDatabaseAsync();
-            SourcePorts = new SourcePortDatabaseManager($"{sourcePortsPath}/sourceports.json", new()
+            SourcePorts = new SourcePortDatabaseManager(new()
             {
                 new InstalledSourcePortRepository(sourcePortsPath),
                 new BuiltInSourcePortRepository()

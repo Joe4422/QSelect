@@ -15,8 +15,6 @@ namespace QSelectAvalonia.Views
     {
         public PackageViewModel ViewModel { get; }
 
-        protected const int imageSideLength = 120;
-
         protected Image PackageImage;
 
         public PackageArtView()
@@ -28,26 +26,9 @@ namespace QSelectAvalonia.Views
         {
             ViewModel = new PackageViewModel(package);
 
-            ViewModel.LoadThumbnailAsync(imageSideLength).ConfigureAwait(false);
+            ViewModel.LoadThumbnailAsync().ConfigureAwait(false);
 
             DataContext = ViewModel;
-        }
-
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Imaage")
-            {
-                if (ViewModel.Thumbnail.Size.Width > ViewModel.Thumbnail.Size.Height)
-                {
-                    int x = ((int)ViewModel.Thumbnail.Size.Width - imageSideLength) / 2;
-                    PackageImage.Clip = new RectangleGeometry(new Rect(x, 0, imageSideLength, imageSideLength));
-                }
-                else
-                {
-                    int y = ((int)ViewModel.Thumbnail.Size.Height - imageSideLength) / 2;
-                    PackageImage.Clip = new RectangleGeometry(new Rect(0, y, imageSideLength, imageSideLength));
-                }
-            }
         }
 
         private void InitializeComponent()

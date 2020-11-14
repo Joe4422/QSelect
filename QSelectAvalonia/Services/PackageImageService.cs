@@ -11,30 +11,40 @@ namespace QSelectAvalonia.Services
 {
     public static class PackageImageService
     {
+        #region Variables
+        private static readonly Dictionary<string, Bitmap> thumbnails = new();
+        #endregion
+
         #region Methods
-        public static async Task<Bitmap> GetThumbnailAsync(Package package, int size)
+        public static async Task<Bitmap> GetThumbnailAsync(Package package)
         {
-            if (package.HasAttribute("ThumbnailURL"))
+            if (thumbnails.TryGetValue(package.Id, out Bitmap value) == true) return value;
+            else
             {
-                byte[] data;
-                try
+                if (package.HasAttribute("ThumbnailURL"))
                 {
-                    using (WebClient client = new())
+                    byte[] data;
+                    try
                     {
-                        data = await client.DownloadDataTaskAsync(package.Attributes["ThumbnailURL"]);
+                        using (WebClient client = new())
+                        {
+                            data = await client.DownloadDataTaskAsync(package.Attributes["ThumbnailURL"]);
+                        }
                     }
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
 
-                using MemoryStream ms = new(data);
-                Bitmap bitmap = new(ms);
+                    using MemoryStream ms = new(data);
+                    Bitmap bitmap = new(ms);
 
-                return bitmap;
+                    thumbnails.Add(package.Id, bitmap);
+
+                    return bitmap;
+                }
+                else return null;
             }
-            else return null;
         }
         
         public static async Task<Bitmap> GetScreenshotAsync(Package package)

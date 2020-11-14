@@ -7,41 +7,61 @@ using QSelectAvalonia.Services;
 using QSelectAvalonia.Views;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace QSelectAvalonia.Controls
 {
     public class PackageArtViewList : UserControl
     {
+        #region Controls
         protected WrapPanel PackageWrapPanel;
         protected ScrollViewer PackageScrollViewer;
-        protected Panel DarkenPanel;
-        protected PackageWindow PackageWindow;
+        #endregion
 
-        protected List<Package> packages;
-
-        protected bool isPackageWindowInUse = false;
-
+        #region Variables
+        protected List<Package> filteredPackages;
         protected const int packagesPerLoad = 50;
-
         protected int numLoads = 0;
+        protected Func<Package, bool> filter = x => true;
+        #endregion
 
+        #region Events
+        public delegate void PackageSelectedEventHandler(Package package);
+        public event PackageSelectedEventHandler PackageSelected;
+        #endregion
+
+        #region Constructors
         public PackageArtViewList()
         {
             this.InitializeComponent();
 
-            this.packages = DatabaseService.Packages.Items;
+            filteredPackages = DatabaseService.Packages.Items;
 
             LoadNextPackageSetAsync().ConfigureAwait(false);
             PackageScrollViewer.ScrollToHome();
+
+        }
+        #endregion
+
+        #region Methods
+        public void SetFilter(Func<Package, bool> filter)
+        {
+            this.filter = filter;
+
+            filteredPackages = DatabaseService.Packages.Items.Where(x => filter(x)).ToList();
+
+            PackageWrapPanel.Children.Clear();
+            numLoads = 0;
+            LoadNextPackageSetAsync().ConfigureAwait(false);
         }
 
         protected async Task LoadNextPackageSetAsync()
         {
             List<Package> pkgsToLoad;
-            if (numLoads * packagesPerLoad > packages.Count) return;
-            else if (numLoads * packagesPerLoad + packagesPerLoad > packages.Count) pkgsToLoad = packages.GetRange(numLoads * packagesPerLoad, packages.Count - (numLoads * packagesPerLoad));
-            else pkgsToLoad = packages.GetRange(numLoads * packagesPerLoad, packagesPerLoad);
+            if (numLoads * packagesPerLoad > filteredPackages.Count) return;
+            else if (numLoads * packagesPerLoad + packagesPerLoad > filteredPackages.Count) pkgsToLoad = filteredPackages.GetRange(numLoads * packagesPerLoad, filteredPackages.Count - (numLoads * packagesPerLoad));
+            else pkgsToLoad = filteredPackages.GetRange(numLoads * packagesPerLoad, packagesPerLoad);
 
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
@@ -58,8 +78,7 @@ namespace QSelectAvalonia.Controls
 
         private void Pav_Tapped(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            PackageWindow.DisplayPackage((sender as PackageArtView).ViewModel.Package);
-            DarkenPanel.IsVisible = true;
+            PackageSelected?.Invoke((sender as PackageArtView).ViewModel.Package);
         }
 
         private void InitializeComponent()
@@ -68,19 +87,8 @@ namespace QSelectAvalonia.Controls
 
             PackageWrapPanel = this.FindControl<WrapPanel>("PackageWrapPanel");
             PackageScrollViewer = this.FindControl<ScrollViewer>("PackageScrollViewer");
-            DarkenPanel = this.FindControl<Panel>("DarkenPanel");
-            PackageWindow = this.FindControl<PackageWindow>("PackageWindow");
 
             PackageScrollViewer.ScrollChanged += PackageScrollViewer_ScrollChanged;
-            DarkenPanel.Tapped += DarkenPanel_Tapped;
-
-            PackageWindow.PointerEnter += (a, b) => isPackageWindowInUse = true;
-            PackageWindow.PointerLeave += (a, b) => isPackageWindowInUse = false;
-        }
-
-        private void DarkenPanel_Tapped(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (!isPackageWindowInUse) DarkenPanel.IsVisible = false;
         }
 
         private void PackageScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -93,5 +101,6 @@ namespace QSelectAvalonia.Controls
                 LoadNextPackageSetAsync().ConfigureAwait(false);
             }
         }
+        #endregion
     }
 }

@@ -1,0 +1,22 @@
+﻿TO DO:
+
+1.	Add source port display, downloading, and selection:
+	a.	Create SourcePortView view
+	b.	Create list of source ports displayed in Source Ports tab
+	c.	Add Download button that downloads the given source port
+	d.	Add Make Active button that makes the source port active when Play Now is clicked
+2.	Add storage of most recently active package and source port
+	a.	Add LastPackageId and LastSourcePortId members to Settings in LibQSelect
+	b.	Have the corresponding items loaded automatically at start
+	c.	Ensure Settings is written to a file
+3.	Add quick items to Home page
+	a.	Add ability to launch last selected package + source port
+	b.	Add ability to view random package
+4.	Make active downloads be displayed in Downloads tab
+	a.	Create DownloadView view
+	b.	Populate Downloads tab with DownloadViews when items are downloading
+5.	Synchronise Quake config to a source port rather than a package
+	a.	Add ability to copy config from source port folder to top-level package folder automatically when a package is loaded
+	b.	Add ability to copy config *back* from top-level package folder to source port folder when a package is unloaded
+6.	Make Package List paged rather than infinite-scrolling
+7.	Move as much functionality as possible back to LibQSelect

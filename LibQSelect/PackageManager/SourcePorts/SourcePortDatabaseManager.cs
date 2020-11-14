@@ -10,7 +10,7 @@ namespace LibQSelect.PackageManager.SourcePorts
 {
     public class SourcePortDatabaseManager : BaseDatabaseManager<SourcePort>
     {
-        public SourcePortDatabaseManager(string dbFilePath, List<IRepository<SourcePort>> repositories) : base(dbFilePath, repositories)
+        public SourcePortDatabaseManager(List<IRepository<SourcePort>> repositories) : base(repositories)
         {
         }
 

@@ -14,6 +14,7 @@
     <None Remove="IAppSettings.cs~RFbe3210.TMP" />
     <None Remove="QSelect.cs~RF1a862e8f.TMP" />
     <None Remove="QSelect.cs~RF9bd8f80.TMP" />
+    <None Remove="Settings.cs~RF8277279.TMP" />
   </ItemGroup>
 
   <ItemGroup>

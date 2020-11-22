@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using LibPackageManager.Repositories;
 using LibQSelect;
 using LibQSelect.PackageManager.SourcePorts;
 using QSelectAvalonia.Services;
@@ -28,11 +29,11 @@ namespace QSelectAvalonia.ViewModels
             _ => "Unknown OS"
         };
 
-        public bool IsDownloaded => SourcePort.IsDownloaded;
-        public bool IsNotDownloaded => !IsDownloaded;
+        public bool IsInstalled => SourcePort.Token.State is ProgressToken.ProgressState.Installed;
+        public bool IsNotInstalled => !IsInstalled;
 
         public bool IsInactive => GameService.Game?.LoadedSourcePort != SourcePort;
-        public bool CanMakeActive => IsInactive && IsDownloaded;
+        public bool CanMakeActive => IsInactive && IsInstalled;
         public FontWeight NameFontWeight => !IsInactive ? FontWeight.Bold : FontWeight.Regular;
         #endregion
 
@@ -45,7 +46,7 @@ namespace QSelectAvalonia.ViewModels
         {
             SourcePort = sourcePort;
 
-            sourcePort.PropertyChanged += ModelPropertyChanged;
+            sourcePort.Token.PropertyChanged += ModelPropertyChanged;
             GameService.Initialised += GameService_Initialised;
         }
         #endregion
@@ -60,12 +61,12 @@ namespace QSelectAvalonia.ViewModels
         {
             switch (e.PropertyName)
             {
-                case nameof(SourcePort.IsDownloaded):
-                    PropertyChanged?.Invoke(this, new(nameof(IsDownloaded)));
-                    PropertyChanged?.Invoke(this, new(nameof(IsNotDownloaded)));
+                case nameof(ProgressToken.State):
+                    PropertyChanged?.Invoke(this, new(nameof(IsInstalled)));
+                    PropertyChanged?.Invoke(this, new(nameof(IsNotInstalled)));
                     PropertyChanged?.Invoke(this, new(nameof(CanMakeActive)));
                     break;
-                case nameof(GameManager.LoadedSourcePort):
+                case nameof(GameLauncher.LoadedSourcePort):
                     PropertyChanged?.Invoke(this, new(nameof(IsInactive)));
                     PropertyChanged?.Invoke(this, new(nameof(NameFontWeight)));
                     PropertyChanged?.Invoke(this, new(nameof(CanMakeActive)));

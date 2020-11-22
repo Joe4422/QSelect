@@ -4,6 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <AvaloniaXaml Remove="%2a%2a\**" />
+    <Compile Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="%2a%2a\**" />
+    <None Remove="%2a%2a\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Assets\splashes.txt" />
     <None Remove="Assets\splashes.txt~RF2dd06d2c.TMP" />
     <None Remove="dpquake_.ttf" />

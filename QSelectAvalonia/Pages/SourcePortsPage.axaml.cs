@@ -1,10 +1,13 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using LibQSelect.PackageManager.SourcePorts;
 using QSelectAvalonia.Services;
 using QSelectAvalonia.Views;
+using System.Collections.Generic;
 using System.Linq;
+using LibPackageManager.Repositories;
 
 namespace QSelectAvalonia.Pages
 {
@@ -28,9 +31,17 @@ namespace QSelectAvalonia.Pages
 
         private void DatabaseService_Initialised()
         {
+            Dictionary<string, List<SourcePort>> groups = new();
             foreach (SourcePort sp in DatabaseService.SourcePorts.Items.Where(x => x.DownloadUrl != null))
             {
-                SourcePortView spv = new(sp);
+                string id = string.Join('-', sp.Id.Split('-', StringSplitOptions.RemoveEmptyEntries)[..^1]);
+                if (!groups.ContainsKey(id)) groups[id] = new();
+                groups[id].Add(sp);
+
+            }
+            foreach (var group in groups)
+            {
+                SourcePortView spv = new(group.Value);
                 spv.Download += Spv_Download;
                 spv.MakeActive += Spv_MakeActive;
 
@@ -45,10 +56,10 @@ namespace QSelectAvalonia.Pages
 
         private async void Spv_Download(object sender, SourcePort sourcePort)
         {
-            if (sourcePort.IsDownloaded) return;
+            if (sourcePort.Token.State is not ProgressToken.ProgressState.NotStarted or ProgressToken.ProgressState.Failed) return;
             else
             {
-                await DownloadService.DownloadItemAsync(sourcePort);
+                await DownloadService.SourcePorts.GetItemAsync(sourcePort);
             }
         }
     }

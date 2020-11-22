@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LibQSelect
 {
-    public class GameManager : INotifyPropertyChanged
+    public class GameLauncher : INotifyPropertyChanged
     {
         #region Variables
         protected PackageDatabaseManager pdm;
@@ -46,10 +46,28 @@ namespace LibQSelect
         #endregion
 
         #region Constructors
-        public GameManager(Settings settings, PackageDatabaseManager pdm)
+        public GameLauncher(Settings settings, PackageDatabaseManager pdm, SourcePortDatabaseManager spdm)
         {
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.pdm = pdm ?? throw new ArgumentNullException(nameof(pdm));
+
+            if (settings.LastPackageID != null)
+            {
+                Package pkg = pdm[settings.LastPackageID];
+                if (pkg != null)
+                {
+                    LoadPackageAsync(pkg).ConfigureAwait(false);
+                }
+            }
+
+            if (settings.LastSourcePortID != null)
+            {
+                SourcePort sp = spdm[settings.LastSourcePortID];
+                if (sp != null)
+                {
+                    LoadSourcePort(sp);
+                }
+            }
         }
         #endregion
 
@@ -57,17 +75,27 @@ namespace LibQSelect
         public void LoadSourcePort(SourcePort sourcePort)
         {
             LoadedSourcePort = sourcePort ?? throw new ArgumentNullException(nameof(sourcePort));
+            settings.LastSourcePortID = sourcePort.Id;
         }
 
-        public async Task<string> LoadPackageAsync(string id, Package package)
+        public async Task<string> LoadPackageAsync(Package package)
         {
             if (LoadedSourcePort is null) throw new Exception($"{nameof(LoadedSourcePort)} was null.");
 
+            string s = await LoadPackagesAsync(package.Id, package);
+
+            settings.LastPackageID = package.Id;
+
+            return s;
+        }
+
+        protected async Task<string> LoadPackagesAsync(string id, Package package)
+        {
             List<Task<string>> loadTasks = new();
 
             foreach (string key in package.Dependencies.Keys)
             {
-                loadTasks.Add(LoadPackageAsync(key, package.Dependencies[key] as Package));
+                loadTasks.Add(LoadPackagesAsync(key, package.Dependencies[key] as Package));
             }
             await Task.WhenAll(loadTasks);
 
@@ -87,8 +115,8 @@ namespace LibQSelect
 
             await Task.Run(() =>
             {
-                string pkgPath = $"{settings.PackagesPath}/{package.Id}";
-                string spPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}";
+                string pkgPath = $"{settings.PackagesPath}/{package.Id}/";
+                string spPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}/";
 
                 // Create symlink into directory
                 Symlink.CreateDirectory($"{spPath}/{package.Id}", pkgPath);
@@ -136,7 +164,7 @@ namespace LibQSelect
 
             await Task.Run(() =>
             {
-                string pkgPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}";
+                string pkgPath = $"{settings.SourcePortsPath}/{LoadedSourcePort.Id}/{package.Id}/";
 
                 // Delete symlink
                 if (Directory.Exists(pkgPath))

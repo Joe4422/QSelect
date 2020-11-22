@@ -1,4 +1,6 @@
-﻿using LibQSelect.PackageManager.Packages;
+﻿using LibPackageManager.Managers;
+using LibPackageManager.Repositories;
+using LibQSelect.PackageManager.Packages;
 using LibQSelect.PackageManager.SourcePorts;
 using System;
 using System.Collections.Generic;
@@ -43,6 +45,15 @@ namespace QSelectAvalonia.Services
             await SourcePorts.RefreshDatabaseAsync();
 
             Initialised?.Invoke();
+        }
+
+        public static object GetRelevantManager(Type repositoryItemType)
+        {
+            if (repositoryItemType is null) throw new ArgumentNullException(nameof(repositoryItemType));
+
+            if (repositoryItemType == typeof(Package)) return Packages;
+            else if (repositoryItemType == typeof(SourcePort)) return SourcePorts;
+            else throw new ArgumentException("Unknown repository item type!", nameof(repositoryItemType));
         }
         #endregion
     }

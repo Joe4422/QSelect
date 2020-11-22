@@ -22,132 +22,132 @@ namespace LibQSelect.PackageManager.SourcePorts
                 // Quakespasm
                 new SourcePort // Win32
                 (
-                    "quakespasm-win32",
-                    "Quakespasm",
-                    "Fitzgibbons",
-                    "quakespasm.exe",
-                    null,
-                    SourcePort.OperatingSystem.Win32
+                    id: "quakespasm-win32",
+                    downloadUrl: null,
+                    name: "Quakespasm",
+                    author: "Ozkan Sezer",
+                    executable: "quakespasm.exe",
+                    os: SourcePort.OperatingSystem.Win32
                 ),
                 new SourcePort // Win64
                 (
-                    "quakespasm-win64",
-                    "Quakespasm",
-                    "Fitzgibbons",
-                    "quakespasm.exe",
-                    null,
-                    SourcePort.OperatingSystem.Win64
+                    id: "quakespasm-win64",
+                    downloadUrl: null,
+                    name: "Quakespasm",
+                    author: "Ozkan Sezer",
+                    executable: "quakespasm.exe",
+                    os: SourcePort.OperatingSystem.Win64
                 ),
                 new SourcePort // Linux32
                 (
-                    "quakespasm-linux32",
-                    "Quakespasm",
-                    "Fitzgibbons",
-                    "quakespasm",
-                    null,
-                    SourcePort.OperatingSystem.Linux32
+                    id: "quakespasm-linux32",
+                    downloadUrl: null,
+                    name: "Quakespasm",
+                    author: "Ozkan Sezer",
+                    executable: "quakespasm",
+                    os: SourcePort.OperatingSystem.Linux32
                 ),
                 new SourcePort // Linux64
                 (
-                    "quakespasm-linux64",
-                    "Quakespasm",
-                    "Fitzgibbons",
-                    "quakespasm",
-                    null,
-                    SourcePort.OperatingSystem.Linux64
+                    id: "quakespasm-linux64",
+                    downloadUrl: null,
+                    name: "Quakespasm",
+                    author: "Ozkan Sezer",
+                    executable: "quakespasm",
+                    os: SourcePort.OperatingSystem.Linux64
                 ),
                 // Quakespasm Spiked
                 new SourcePort // Win32
                 (
-                    "quakespasm-spiked-win32",
-                    "Quakespasm Spiked",
-                    "Shpoike",
-                    "quakespasm-spiked-win32.exe",
-                    "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_win32.zip",
-                    SourcePort.OperatingSystem.Win32
+                    id: "quakespasm-spiked-win32",
+                    downloadUrl: "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_win32.zip",
+                    name: "Quakespasm Spiked",
+                    author: "Shpoike",
+                    executable: "quakespasm-spiked-win32.exe",
+                    os: SourcePort.OperatingSystem.Win32
                 ),
                 new SourcePort // Win64
                 (
-                    "quakespasm-spiked-win64",
-                    "Quakespasm Spiked",
-                    "Shpoike",
-                    "quakespasm-spiked-win64.exe",
-                    "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_win64.zip",
-                    SourcePort.OperatingSystem.Win64
+                    id: "quakespasm-spiked-win64",
+                    downloadUrl: "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_win64.zip",
+                    name: "Quakespasm Spiked",
+                    author: "Shpoike",
+                    executable: "quakespasm-spiked-win64.exe",
+                    os: SourcePort.OperatingSystem.Win64
                 ),
                 new SourcePort // Linux64
                 (
-                    "quakespasm-spiked-linux64",
-                    "Quakespasm Spiked",
-                    "Shpoike",
-                    "quakespasm-spiked-linux64",
-                    "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_linux64.zip",
-                    SourcePort.OperatingSystem.Linux64
+                    id: "quakespasm-spiked-linux64",
+                    downloadUrl: "https://fte.triptohell.info/moodles/qss/quakespasm_spiked_linux64.zip",
+                    name: "Quakespasm Spiked",
+                    author: "Shpoike",
+                    executable: "quakespasm-spiked-linux64",
+                    os: SourcePort.OperatingSystem.Linux64
                 ),
                 // DarkPlaces
                 new SourcePort // Win32
                 (
-                    "darkplaces-win32",
-                    "DarkPlaces",
-                    "LadyHavoc",
-                    "darkplaces-sdl.exe",
-                    "https://icculus.org/twilight/darkplaces/files/darkplacesenginewindowsonly20140513.zip",
-                    SourcePort.OperatingSystem.Win32
+                    id: "darkplaces-win32",
+                    downloadUrl: "https://icculus.org/twilight/darkplaces/files/darkplacesenginewindowsonly20140513.zip",
+                    name: "DarkPlaces",
+                    author: "LadyHavoc",
+                    executable: "darkplaces-sdl.exe",
+                    os: SourcePort.OperatingSystem.Win32
                 ),
                 new SourcePort // Win64
                 (
-                    "darkplaces-win64",
-                    "DarkPlaces",
-                    "LadyHavoc",
-                    "darkplaces-sdl.exe",
-                    "https://icculus.org/twilight/darkplaces/files/darkplacesenginewindows64only20140513.zip",
-                    SourcePort.OperatingSystem.Win64
+                    id: "darkplaces-win64",
+                    downloadUrl: "https://icculus.org/twilight/darkplaces/files/darkplacesenginewindows64only20140513.zip",
+                    name: "DarkPlaces",
+                    author: "LadyHavoc",
+                    executable: "darkplaces-sdl.exe",
+                    os: SourcePort.OperatingSystem.Win64
                 ),
                 new SourcePort // Linux32
                 (
-                    "darkplaces-linux32",
-                    "DarkPlaces",
-                    "LadyHavoc",
-                    "darkplaces-linux-686-sdl",
-                    "https://icculus.org/twilight/darkplaces/files/darkplacesengine20140513.zip",
-                    SourcePort.OperatingSystem.Linux32
+                    id: "darkplaces-linux32",
+                    downloadUrl: "https://icculus.org/twilight/darkplaces/files/darkplacesengine20140513.zip",
+                    name: "DarkPlaces",
+                    author: "LadyHavoc",
+                    executable: "darkplaces-linux-686-sdl",
+                    os: SourcePort.OperatingSystem.Linux32
                 ),
                 new SourcePort // Linux64
                 (
-                    "darkplaces-linux64",
-                    "DarkPlaces",
-                    "LadyHavoc",
-                    "darkplaces-linux-x86_64-sdl",
-                    "https://icculus.org/twilight/darkplaces/files/darkplacesengine20140513.zip",
-                    SourcePort.OperatingSystem.Linux64
+                    id: "darkplaces-linux64",
+                    downloadUrl: "https://icculus.org/twilight/darkplaces/files/darkplacesengine20140513.zip",
+                    name: "DarkPlaces",
+                    author: "LadyHavoc",
+                    executable: "darkplaces-linux-x86_64-sdl",
+                    os: SourcePort.OperatingSystem.Linux64
                 ),
                 // NQuake
                 new SourcePort // Win32
                 (
-                    "nquake-win32",
-                    "NQuake",
-                    "NQuake Team",
-                    "ezquake.exe",
-                    null,
-                    SourcePort.OperatingSystem.Win32
+                    id: "nquake-win32",
+                    downloadUrl: null,
+                    name: "NQuake",
+                    author: "NQuake Team",
+                    executable: "ezquake.exe",
+                    os: SourcePort.OperatingSystem.Win32
                 ),
                 new SourcePort // Linux32
                 (
-                    "nquake-linux32",
-                    "NQuake",
-                    "NQuake Team",
-                    "ezquake-gl.glx",
-                    null,
-                    SourcePort.OperatingSystem.Linux32
+                    id: "nquake-linux32",
+                    downloadUrl: null,
+                    name: "NQuake",
+                    author: "NQuake Team",
+                    executable: "ezquake-gl.glx",
+                    os: SourcePort.OperatingSystem.Linux32
                 ),
                 new SourcePort // Linux64
                 (
-                    "nquake-linux64",
-                    "NQuake",
-                    "NQuake Team",
-                    "ezquake-gl.glx",
-                    null,
-                    SourcePort.OperatingSystem.Linux64
+                    id: "nquake-linux64",
+                    downloadUrl: null,
+                    name: "NQuake",
+                    author: "NQuake Team",
+                    executable: "ezquake-gl.glx",
+                    os: SourcePort.OperatingSystem.Linux64
                 ),
             };
         }

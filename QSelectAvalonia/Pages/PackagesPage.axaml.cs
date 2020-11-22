@@ -25,11 +25,9 @@ namespace QSelectAvalonia.Pages
         protected List<(string text, Func<Package, bool> filter)> filters = new()
         {
             new("All Packages", (x) => true),
-            new("Downloaded", (x) => x.IsDownloaded),
-            new("★★★★★", (x) => x.GetAttribute("Rating") == "★★★★★")
+            new("Downloaded", (x) => x.Token.State == LibPackageManager.Repositories.ProgressToken.ProgressState.Installed),
+            new("★★★★★", (x) => x.GetAttribute("Rating") == "5")
         };
-
-        //$"{new string('★', rint)}{new string('☆', 5 - rint)}";
 
         public PackagesPage()
         {
@@ -69,6 +67,14 @@ namespace QSelectAvalonia.Pages
 
             PackageWindowPanel.Children.Clear();
             PackageWindowPanel.Children.Add(PackageWindow);
+            PackageWindowPanel.IsVisible = true;
+            PackageWindow.GoBack += PackageWindow_GoBack;
+        }
+
+        private void PackageWindow_GoBack(object sender)
+        {
+            PackageWindowPanel.IsVisible = false;
+            PackageWindowPanel.Children.Clear();
         }
 
         private void InitializeComponent()

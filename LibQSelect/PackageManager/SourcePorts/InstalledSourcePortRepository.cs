@@ -51,10 +51,15 @@ namespace LibQSelect.PackageManager.SourcePorts
                         "macos" => SourcePort.OperatingSystem.MacOS,
                         _ => SourcePort.OperatingSystem.Unknown
                     };
-                    SourcePort sourcePort = new SourcePort(id, os: os)
-                    {
-                        InstallPath = $"{sourcePortDirPath}/{id}"
-                    };
+                    SourcePort sourcePort = new SourcePort
+                    (
+                        id: id,
+                        downloadUrl: null,
+                        name: null,
+                        author: null,
+                        executable: null,
+                        os: os
+                    );
 
                     Items.Add(sourcePort);
                 }

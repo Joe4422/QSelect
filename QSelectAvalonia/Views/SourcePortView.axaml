@@ -11,7 +11,7 @@
 			</Grid>
 			<TextBlock Classes="primary" MinWidth="300" Text="{Binding Path=Name}" FontSize="20" VerticalAlignment="Center" FontWeight="{Binding Path=NameFontWeight}" Margin="20"/>
 			<TextBlock Classes="secondary" MinWidth="200" Text="{Binding Path=Author}" FontSize="20" Margin="20"/>
-			<TextBlock Classes="secondary" MinWidth="200" Text="{Binding Path=OS}" FontSize="20" Margin="20"/>
+			<ComboBox x:Name="OSComboBox"/>
 		</StackPanel>
 		<StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Right">
 			<Button x:Name="DownloadButton" Width="100" Height="50" Content="Download" IsEnabled="{Binding Path=IsNotDownloaded}"/>

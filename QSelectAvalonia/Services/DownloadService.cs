@@ -1,4 +1,5 @@
-﻿using LibPackageManager.Repositories;
+﻿using LibPackageManager.Managers;
+using LibPackageManager.Repositories;
 using LibQSelect.PackageManager.Packages;
 using LibQSelect.PackageManager.SourcePorts;
 using System;
@@ -26,26 +27,6 @@ namespace QSelectAvalonia.Services
 
             Packages = new PackageDownloadManager(downloadsPath, packagesPath);
             SourcePorts = new SourcePortDownloadManager(downloadsPath, sourcePortsPath);
-        }
-
-        public static async Task<bool> DownloadItemAsync(IRepositoryItem item)
-        {
-            if (item is Package package)
-            {
-                bool result = await Packages.GetItemAsync(package);
-                await DatabaseService.Packages.RefreshDatabaseAsync();
-                return result;
-            }
-            else if (item is SourcePort sourcePort)
-            {
-                bool result = await SourcePorts.GetItemAsync(sourcePort);
-                await DatabaseService.SourcePorts.RefreshDatabaseAsync();
-                return result;
-            }
-            else
-            {
-                throw new ArgumentException("Unknown provider item type.");
-            }
         }
         #endregion
     }

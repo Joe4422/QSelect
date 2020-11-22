@@ -34,11 +34,10 @@ namespace QSelectAvalonia
 
         protected async Task InitPackageListAsync()
         {
-            await DatabaseService.InitialiseAsync("Packages", "SourcePorts");
-            DownloadService.Initialise("Downloads", "Packages", "SourcePorts");
-            GameService.Initialise(new Settings(), DatabaseService.Packages);
-
-            //PackagesTabItem.Content = new PackageArtViewList(DatabaseService.Packages.Items);
+            await SettingsService.InitialiseAsync();
+            await DatabaseService.InitialiseAsync(SettingsService.Settings.PackagesPath, SettingsService.Settings.SourcePortsPath);
+            DownloadService.Initialise(SettingsService.Settings.DownloadsPath, SettingsService.Settings.PackagesPath, SettingsService.Settings.SourcePortsPath);
+            GameService.Initialise();
         }
 
         private void InitializeComponent()

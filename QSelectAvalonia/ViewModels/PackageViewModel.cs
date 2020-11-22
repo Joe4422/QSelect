@@ -12,6 +12,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LibPackageManager.Repositories;
 
 namespace QSelectAvalonia.ViewModels
 {
@@ -23,7 +24,15 @@ namespace QSelectAvalonia.ViewModels
         public string Title => Package.GetAttribute("Title") ?? Package.Id;
         public string Author => Package.GetAttribute("Author") ?? "";
         public bool HasAuthor => Author != "";
-        public string Rating => Package.GetAttribute("Rating") ?? "";
+        protected string rating;
+        public string Rating {
+            get
+            {
+                bool success = int.TryParse(rating, out int rint);
+                if (!success) return "Unrated";
+                else return $"{new string('★', rint)}{new string('☆', 5 - rint)}";
+            }
+        }
         public bool HasRating => Rating != "";
 
         protected IImage thumbnail = null;
@@ -37,7 +46,7 @@ namespace QSelectAvalonia.ViewModels
             }
         }
 
-        public bool IsDownloaded => Package.IsDownloaded;
+        public bool IsInstalled => Package.Token.State == ProgressToken.ProgressState.Installed;
         #endregion Properties
 
         #region Events
@@ -48,8 +57,9 @@ namespace QSelectAvalonia.ViewModels
         public PackageViewModel(Package package)
         {
             Package = package;
+            rating = Package.GetAttribute("Rating") ?? "";
 
-            Package.PropertyChanged += Package_PropertyChanged;
+            Package.Token.PropertyChanged += Package_Token_PropertyChanged;
         }
         #endregion
 
@@ -62,12 +72,12 @@ namespace QSelectAvalonia.ViewModels
             }
         }
 
-        private void Package_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Package_Token_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
-                case nameof(Package.IsDownloaded):
-                    PropertyChanged?.Invoke(this, new(nameof(IsDownloaded)));
+                case nameof(ProgressToken.State):
+                    PropertyChanged?.Invoke(this, new(nameof(IsInstalled)));
                     break;
             }
         }

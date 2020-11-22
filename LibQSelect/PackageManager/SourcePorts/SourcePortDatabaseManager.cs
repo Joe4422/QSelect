@@ -14,6 +14,11 @@ namespace LibQSelect.PackageManager.SourcePorts
         {
         }
 
+        protected override SourcePort CreateUnknownDependency(string id)
+        {
+            return new(id, null);
+        }
+
         protected override SourcePort MergeItems(SourcePort superior, SourcePort inferior)
         {
             // Check if arguments are null
@@ -36,15 +41,19 @@ namespace LibQSelect.PackageManager.SourcePorts
             string downloadUrl = superior.DownloadUrl is null ? inferior.DownloadUrl : superior.DownloadUrl;
 
             // Determine operating system
-            SourcePort.OperatingSystem supportedOS = superior.SupportedOS == SourcePort.OperatingSystem.Unknown ? inferior.SupportedOS : superior.SupportedOS;
+            SourcePort.OperatingSystem os = superior.SupportedOS == SourcePort.OperatingSystem.Unknown ? inferior.SupportedOS : superior.SupportedOS;
 
-            // Determine install path
-            string installPath = superior.InstallPath is null ? inferior.InstallPath : superior.InstallPath;
+            SourcePort sourcePort = new
+            (
+                id: superior.Id,
+                downloadUrl: downloadUrl,
+                name: name,
+                author: author,
+                executable: executable,
+                os: os
+            );
 
-            SourcePort sourcePort = new(superior.Id, name, author, executable, downloadUrl, supportedOS)
-            {
-                InstallPath = installPath
-            };
+            if (superior.Token.State == ProgressToken.ProgressState.Installed || inferior.Token.State == ProgressToken.ProgressState.Installed) sourcePort.Token.State = ProgressToken.ProgressState.Installed;
 
             return sourcePort;
         }

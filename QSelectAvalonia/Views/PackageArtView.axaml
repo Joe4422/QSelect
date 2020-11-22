@@ -8,13 +8,13 @@
 		<Grid>
 			<Canvas Width="270" Height="270" Grid.Row="0" ClipToBounds="True" Background="Black">
 				<Image x:Name="PackageImage" Source="{Binding Path=Thumbnail}" Height="270" ClipToBounds="True" Margin="-100000" Canvas.Left="135" Canvas.Top="135"/>
-				<Panel x:Name="DarkenPanel" Grid.Row="0" Width="40" Height="40" IsVisible="{Binding Path=IsDownloaded}" Background="#7F000000" VerticalAlignment="Top" HorizontalAlignment="Left">
+				<Panel x:Name="DarkenPanel" Grid.Row="0" Width="40" Height="40" IsVisible="{Binding Path=IsInstalled, FallbackValue=True}" Background="#7F000000" VerticalAlignment="Top" HorizontalAlignment="Left">
 					<TextBlock x:Name="TickTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Text="✓" FontSize="20" Foreground="White"/>
 				</Panel>
 			</Canvas>
 		</Grid>
-		<TextBlock x:Name="TitleTextBlock" Classes="primary" Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Path=Title}" FontSize="20" TextWrapping="Wrap" TextAlignment="Center"/>
-		<TextBlock x:Name="AuthorTextBlock" Grid.Row="2" Classes="secondary" HorizontalAlignment="Center" Text="{Binding Path=Author}" IsVisible="{Binding Path=HasAuthor}" FontSize="20" TextTrimming="CharacterEllipsis"/>
-		<TextBlock x:Name="RatingTextBlock" Grid.Row="3" Classes="secondary" HorizontalAlignment="Center" Text="{Binding Path=Rating}" IsVisible="{Binding Path=HasRating}" FontSize="20" TextTrimming="CharacterEllipsis"/>
+		<TextBlock x:Name="TitleTextBlock" Classes="primary" Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Path=Title, FallbackValue=Dummy Title}" FontSize="20" TextWrapping="Wrap" TextAlignment="Center"/>
+		<TextBlock x:Name="AuthorTextBlock" Grid.Row="2" Classes="secondary" HorizontalAlignment="Center" Text="{Binding Path=Author, FallbackValue=Dummy Author}" IsVisible="{Binding Path=HasAuthor}" FontSize="20" TextTrimming="CharacterEllipsis"/>
+		<TextBlock x:Name="RatingTextBlock" Grid.Row="3" Classes="secondary" HorizontalAlignment="Center" Text="{Binding Path=Rating, FallbackValue=★★★★★}" IsVisible="{Binding Path=HasRating}" FontSize="20" TextTrimming="CharacterEllipsis"/>
 	</Grid>
 </UserControl>

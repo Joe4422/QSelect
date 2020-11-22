@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
+using LibPackageManager.Repositories;
 
 namespace LibQSelect.PackageManager.SourcePorts
 {
@@ -14,15 +15,23 @@ namespace LibQSelect.PackageManager.SourcePorts
         {
         }
 
-        protected override async Task InstallItemAsync(SourcePort item, string downloadedFilePath)
+        protected override async Task<bool> InstallItemAsync(SourcePort sourcePort)
         {
-            string extractDir = $"{installDir}/{item.Id}";
+            string extractDir = $"{installDir}/{sourcePort.Id}/";
 
-            Directory.CreateDirectory(extractDir);
-
-            await Task.Run(() => ZipFile.ExtractToDirectory(downloadedFilePath, extractDir));
-
-            item.InstallPath = $"{installDir}/{item.Id}";
+            // Try to install source port
+            try
+            {
+                Directory.CreateDirectory(extractDir);
+                await Task.Run(() => ZipFile.ExtractToDirectory($"{downloadDir}/{Path.GetFileName(sourcePort.DownloadUrl)}", extractDir));
+                return true;
+            }
+            catch (Exception)
+            {
+                sourcePort.Token.State = ProgressToken.ProgressState.Failed;
+                Directory.Delete(extractDir, true);
+                return false;
+            }
         }
     }
 }

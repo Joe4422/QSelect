@@ -1,4 +1,5 @@
-﻿using ABI.Windows.UI.WebUI;
+﻿using ABI.Windows.Devices.Bluetooth.Background;
+using ABI.Windows.UI.WebUI;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -22,9 +23,13 @@ namespace QSelectAvalonia.Views
     public class PackageWindow : UserControl
     {
         protected Button PlayNowButton;
-        protected Button DownloadButton;
+        protected Button InstallButton;
+        protected Button BackButton;
 
         public PackageWindowViewModel ViewModel { get; } = null;
+
+        public delegate void GoBackEventHandler(object sender);
+        public event GoBackEventHandler GoBack;
 
         public PackageWindow()
         {
@@ -43,27 +48,29 @@ namespace QSelectAvalonia.Views
             AvaloniaXamlLoader.Load(this);
 
             PlayNowButton = this.FindControl<Button>("PlayNowButton");
-            DownloadButton = this.FindControl<Button>("DownloadButton");
+            InstallButton = this.FindControl<Button>("InstallButton");
+            BackButton = this.FindControl<Button>("BackButton");
 
             PlayNowButton.Click += PlayNowButton_ClickAsync;
-            DownloadButton.Click += DownloadButton_ClickAsync;
+            InstallButton.Click += InstallButton_ClickAsync;
+            BackButton.Click += (a, b) => GoBack?.Invoke(this);
         }
 
-        private async void DownloadButton_ClickAsync(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void InstallButton_ClickAsync(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (ViewModel.IsDownloaded) return;
+            if (ViewModel.IsInstalled) return;
             else
             {
-                await DownloadService.DownloadItemAsync(ViewModel.Package);
+                await DownloadService.Packages.GetItemAsync(ViewModel.Package);
             }
         }
 
         private async void PlayNowButton_ClickAsync(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (!ViewModel.Package.IsDownloaded || GameService.Game?.LoadedSourcePort == null) return;
+            if (!ViewModel.IsInstalled || GameService.Game?.LoadedSourcePort == null) return;
             else
             {
-                await GameService.Game.LoadPackageAsync(ViewModel.Package.Id, ViewModel.Package);
+                await GameService.Game.LoadPackageAsync(ViewModel.Package);
 
                 string args;
                 if (ViewModel.Package.HasAttribute("StartMaps") && ViewModel.Package.GetAttribute("StartMaps") != "")

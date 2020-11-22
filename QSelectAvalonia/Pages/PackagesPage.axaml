@@ -6,12 +6,10 @@
 			 xmlns:views="clr-namespace:QSelectAvalonia.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="QSelectAvalonia.Pages.PackagesPage">
-	<Grid ColumnDefinitions="400,*,500">
+	<Grid ColumnDefinitions="400,*">
 		<StackPanel x:Name="FilterPanel" Grid.Column="0" Background="Black" Orientation="Vertical">
 		</StackPanel>
 		<Panel x:Name="PackagesPanel" Grid.Column="1" Classes="page" MinWidth="300"/>
-		<Panel x:Name="PackageWindowPanel" Grid.Column="2">
-			<views:PackageWindow/>
-		</Panel>
+		<Panel x:Name="PackageWindowPanel" Grid.Column="1" Classes="page" IsVisible="False"/>
 	</Grid>
 </UserControl>
